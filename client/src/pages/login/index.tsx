@@ -6,7 +6,6 @@ import styles from './styles.module.scss'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useStyles } from './iconsStyle'
-import { useEffect } from 'react';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>
 
@@ -54,6 +53,10 @@ function Login() {
 
     function handleSubmit(event: React.FormEvent) {
         event.preventDefault()
+
+        if (!(isEmail && isPassword)) {
+            console.log(email, password)
+        }
     }
 
     const backgroundStyle = {
@@ -86,9 +89,11 @@ function Login() {
                                     id="email"
                                     name="email"
                                     placeholder="Seu email institucional"
+                                    autoComplete="off"
                                     onChange={handleEmail}
                                     value={email}
                                 />
+                                <span className={styles.inputError}>{(isEmail && email !== '') && "Email inválido!"}</span>
                             </label>
                             <label>
                                 <span>Senha</span>
@@ -97,6 +102,7 @@ function Login() {
                                     id="password"
                                     name="password"
                                     placeholder="Mínimo de 8 caracteres"
+                                    autoComplete="off"
                                     onChange={handlePassword}
                                     value={password}
                                 />
@@ -105,10 +111,11 @@ function Login() {
                                 ) : (
                                     <VisibilityOffIcon onClick={toggleViewPass} className={viewStyles.root} />
                                 )}
+                                <span className={styles.inputError}>{(isPassword && password !== '') && "Senha inválida!"}</span>
                             </label>
                         </div>
                         <button
-                            type="button"
+                            type="submit"
                         >
                             Entrar
                         </button>

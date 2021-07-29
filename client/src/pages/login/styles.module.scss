@@ -61,6 +61,14 @@
                                 color: var(--gray-light);
                             }
                         }
+
+                        .inputError {
+                            min-height: 1.2rem;
+                            font-size: 1.2rem;
+                            line-height: 1.2rem;
+                            margin-top: 0.2rem;
+                            color: red;
+                        }
                     }
                 }
                 button {

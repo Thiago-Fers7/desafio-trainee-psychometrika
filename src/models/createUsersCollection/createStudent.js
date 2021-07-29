@@ -7,7 +7,7 @@ async function createStudent() {
     mongoose
 
     const newUserEmail = "thiago@email.com"
-    const newUserPassword = "psychoadmin"
+    const newUserPassword = "psychostudent"
 
     const isUser = await students.findOne({ email: newUserEmail })
 

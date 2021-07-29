@@ -3,6 +3,6 @@ import { userController } from './controllers/userController'
 
 const routes = Router()
 
-routes.get('/', userController.getUsers)
+routes.post('/login', userController.authentication)
 
 export { routes }

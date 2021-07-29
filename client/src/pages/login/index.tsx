@@ -1,19 +1,30 @@
 import React from 'react'
 import { useState } from 'react'
+import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api'
 import styles from './styles.module.scss'
+
+import { Loading } from '../../components/Loading'
 
 // Icons
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useStyles } from './iconsStyle'
-import { useHistory } from 'react-router-dom';
+import { AxiosResponse } from 'axios';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>
+
+interface ServerResponseLoginData {
+    authentication?: string,
+    pass?: boolean,
+    error?: string,
+    message?: string
+}
 
 function Login() {
     const viewStyles = useStyles()
     const [viewPass, setViewPass] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const [email, setEmail] = useState<string>('')
     const [isEmail, isSetEmail] = useState<boolean>(true)
@@ -58,24 +69,40 @@ function Login() {
     async function handleSubmit(event: React.FormEvent) {
         event.preventDefault()
 
-        if (!isEmail && !isPassword) {
-            const { data } = await api.post('login', {
-                email,
-                password
-            })
+        try {
+            if (!isEmail && !isPassword) {
+                setIsLoading(true)
 
-            if (data.error) {
-                alert(data.error)
-                return
-            }
+                await api.post('login', {
+                    email,
+                    password
+                })
+                    .then((res) => {
+                        const data: ServerResponseLoginData = res.data
 
-            if (data.authentication === 'admin') {
-                history.push('/dashbord/admin')
-            } else if (data.authentication === 'student') {
-                history.push('/dashbord/student')
+                        if (data.error) {
+                            throw data.error
+                        }
+
+                        if (data.authentication === 'admin') {
+                            history.push('/dashboard/admin')
+                        } else if (data.authentication === 'student') {
+                            history.push('/dashboard/student')
+                        }
+                    })
+                    .catch(err => {
+                        alert(err)
+                    })
+                    .finally(() => {
+                        setIsLoading(false)
+                    })
+            } else {
+                throw 'Preencha todos os dados antes de prosseguir'
             }
-        } else {
-            alert('Preencha os dados antes de prosseguir')
+        } catch (err) {
+            if (typeof err === 'string') {
+                alert(err)
+            }
         }
     }
 
@@ -142,6 +169,12 @@ function Login() {
                     </fieldset>
                 </form>
             </section>
+
+            {/* Loading */}
+            {isLoading && (
+                <Loading />
+            )}
+
         </div>
     )
 }

@@ -13,8 +13,12 @@ type ChangeEvent = React.ChangeEvent<HTMLInputElement>
 function Login() {
     const viewStyles = useStyles()
     const [viewPass, setViewPass] = useState<boolean>(false)
+
     const [email, setEmail] = useState<string>('')
     const [isEmail, isSetEmail] = useState<boolean>(true)
+
+    const [password, setPassword] = useState<string>('')
+    const [isPassword, isSetPassword] = useState<boolean>(true)
 
     function toggleViewPass() {
         setViewPass(!viewPass)
@@ -33,6 +37,18 @@ function Login() {
             isSetEmail(false)
         } else {
             isSetEmail(true)
+        }
+    }
+
+    function handlePassword(event: ChangeEvent) {
+        const inputValue = event.target.value
+
+        setPassword(inputValue)
+
+        if (inputValue.length >= 8) {
+            isSetPassword(false)
+        } else {
+            isSetPassword(true)
         }
     }
 
@@ -81,6 +97,8 @@ function Login() {
                                     id="password"
                                     name="password"
                                     placeholder="Mínimo de 8 caracteres"
+                                    onChange={handlePassword}
+                                    value={password}
                                 />
                                 {viewPass ? (
                                     <VisibilityIcon onClick={toggleViewPass} className={viewStyles.root} />

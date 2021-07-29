@@ -10,20 +10,19 @@ const userController = {
 
             if (admin) {
                 if (admin && bcrypt.compareSync(password, admin.password))
-                    res.json({ authentication: "admin", pass: true })
+                    res.status(200).json({ authentication: "admin", pass: true })
                 else
                     throw "Login ou senha inválidos!"
             } else {
                 const student = await students.findOne({ email })
 
                 if (student && bcrypt.compareSync(password, student.password))
-                    res.json({ authentication: "student", pass: true })
+                    res.status(200).json({ authentication: "student", pass: true })
                 else
                     throw "Login ou senha inválidos!"
             }
         } catch (err) {
-            console.log(err)
-            res.json({ error: err, message: "Usuário não encontrado!" })
+            res.status(200).json({ error: err, message: "Usuário não encontrado!" })
         }
     }
 }

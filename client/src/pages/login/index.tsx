@@ -1,11 +1,13 @@
 import React from 'react'
 import { useState } from 'react'
+import { api } from '../../services/api'
 import styles from './styles.module.scss'
 
 // Icons
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useStyles } from './iconsStyle'
+import { useHistory } from 'react-router-dom';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>
 
@@ -18,6 +20,8 @@ function Login() {
 
     const [password, setPassword] = useState<string>('')
     const [isPassword, isSetPassword] = useState<boolean>(true)
+
+    const history = useHistory()
 
     function toggleViewPass() {
         setViewPass(!viewPass)
@@ -51,11 +55,27 @@ function Login() {
         }
     }
 
-    function handleSubmit(event: React.FormEvent) {
+    async function handleSubmit(event: React.FormEvent) {
         event.preventDefault()
 
-        if (!(isEmail && isPassword)) {
-            console.log(email, password)
+        if (!isEmail && !isPassword) {
+            const { data } = await api.post('login', {
+                email,
+                password
+            })
+
+            if (data.error) {
+                alert(data.error)
+                return
+            }
+
+            if (data.authentication === 'admin') {
+                history.push('/dashbord/admin')
+            } else if (data.authentication === 'student') {
+                history.push('/dashbord/student')
+            }
+        } else {
+            alert('Preencha os dados antes de prosseguir')
         }
     }
 

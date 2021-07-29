@@ -1,0 +1,81 @@
+@mixin centerContentFlex {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+
+    display: grid;
+    place-items: center;
+
+    font-family: sans-serif;
+
+    section {
+        padding: 4.8rem;
+        background: var(--background-white);
+
+        box-shadow: 0px 24px 48px #5a5b6a14, 0px 12px 24px #3a3a4414, 0px 1px 0px #3a3a441a;
+
+        border-radius: 1.6rem;
+        color: var(--sec-text);
+
+        p.descript {
+            font-size: 1.8rem;
+            line-height: 4rem;
+            letter-spacing: 0.01rem;
+        }
+
+        form {
+            fieldset {
+                border: none;
+
+                .inputFields {
+                    @include centerContentFlex();
+                    row-gap: 0.8rem;
+
+                    padding-bottom: 2.4rem;
+                    margin: 1rem 0 1rem 0;
+
+                    label {
+                        @include centerContentFlex();
+
+                        position: relative;
+                        line-height: 2.4rem;
+                        font-size: 1.6rem;
+                        letter-spacing: 0.01rem;
+
+                        input {
+                            padding-left: 0.8rem;
+                            height: 4.8rem;
+                            border-radius: 0.4rem;
+                            border: 1px solid var(--gray-light);
+                            width: 33.7rem;
+                            color: var(--sec-text);
+
+                            &::placeholder {
+                                line-height: 2.4rem;
+                                font-size: 1.6rem;
+                                color: var(--gray-light);
+                            }
+                        }
+                    }
+                }
+                button {
+                    width: 100%;
+                    font-size: 1.8rem;
+                    font-weight: 600;
+                    letter-spacing: 0.01rem;
+                    line-height: 2.6rem;
+                    padding: 1.1rem 2.4rem;
+                    background: var(--background-button);
+                    border-radius: 0.8rem;
+                    border: none;
+                    color: white;
+                }
+            }
+        }
+    }
+}

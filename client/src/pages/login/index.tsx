@@ -6,14 +6,34 @@ import styles from './styles.module.scss'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useStyles } from './iconsStyle'
+import { useEffect } from 'react';
+
+type ChangeEvent = React.ChangeEvent<HTMLInputElement>
 
 function Login() {
     const viewStyles = useStyles()
-
     const [viewPass, setViewPass] = useState<boolean>(false)
+    const [email, setEmail] = useState<string>('')
+    const [isEmail, isSetEmail] = useState<boolean>(true)
 
     function toggleViewPass() {
         setViewPass(!viewPass)
+    }
+
+    function handleEmail(event: ChangeEvent) {
+        const regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi
+
+        const inputValue = event.target.value
+
+        setEmail(inputValue)
+
+        const isValidValue = regexEmail.test(inputValue)
+
+        if (isValidValue) {
+            isSetEmail(false)
+        } else {
+            isSetEmail(true)
+        }
     }
 
     function handleSubmit(event: React.FormEvent) {
@@ -50,6 +70,8 @@ function Login() {
                                     id="email"
                                     name="email"
                                     placeholder="Seu email institucional"
+                                    onChange={handleEmail}
+                                    value={email}
                                 />
                             </label>
                             <label>

@@ -1,9 +1,63 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { UserContext } from '../../contexts/UserContext'
 import styles from './styles.module.scss'
 
+
 function Header() {
-    function handleSubmit(event: React.FormEvent) {
+    const [isMenu, setIsMenu] = useState<boolean>(false)
+    const [isAdminCheck, setIsAdminCheck] = useState<boolean>(false)
+    const [isStudentCheck, setIsStudentCheck] = useState<boolean>(false)
+
+    const { authenticationData } = useContext(UserContext)
+
+    const history = useHistory()
+
+    const admin: string = 'admin'
+    const student: string = 'student'
+
+    useEffect((): void => {
+        verifyCheck(authenticationData)
+    }, [authenticationData])
+
+    function handleCheck(event: React.ChangeEvent<HTMLInputElement>): void {
+        const valueInput: string = event.target.value
+        verifyCheck(valueInput)
+    }
+
+    function verifyCheck(auth: string): void {
+        switch (auth) {
+            case admin:
+                setIsAdminCheck(true)
+                setIsStudentCheck(false)
+                break
+            case student:
+                setIsAdminCheck(false)
+                setIsStudentCheck(true)
+                break
+            default:
+                alert("Tipo de usuário não disponível")
+                break
+        }
+    }
+
+    function menuToggle(): void {
+        setIsMenu(!isMenu)
+    }
+
+    function handleLogout(): void {
+        history.push('/login')
+    }
+
+    function handleSubmit(event: React.FormEvent): void {
         event.preventDefault()
+
+        if (isAdminCheck) {
+            history.push('/dashboard/admin')
+        } else if (isStudentCheck) {
+            history.push('/dashboard/student')
+        }
     }
 
     return (
@@ -13,10 +67,10 @@ function Header() {
                     <img src="/images/logo.svg" alt="Logo Psychometrika" />
                     <p className={styles.descript}>Desafio Trainee</p>
                 </div>
-                <div className={`${styles.menuContainer} ${styles.activeMenu}`}>
-                    <div className={styles.iconMenu}>
+                <div className={`${styles.menuContainer} ${isMenu ? styles.activeMenu : ""}`}>
+                    <div className={styles.iconMenu} onClick={menuToggle}>
                         <span>A</span>
-                        <img src="/images/down.svg" alt="" />
+                        <img src="/images/down.svg" alt="Exibir menu" />
                     </div>
 
                     {/* Menu MODAL */}
@@ -25,29 +79,42 @@ function Header() {
                             <fieldset>
                                 <legend>Você está atualmente com</legend>
 
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="states"
-                                        id="admin"
-                                    />
-                                    <span>Acesso do Admin</span>
-                                </label>
+                                {authenticationData === admin && (
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="states"
+                                            id="admin"
+                                            value={admin}
+                                            checked={isAdminCheck}
+                                            onChange={handleCheck}
+                                        />
+                                        <span>Acesso do Admin</span>
+                                    </label>
+                                )}
 
                                 <label>
                                     <input
                                         type="radio"
                                         name="states"
                                         id="student"
+                                        value={student}
+                                        checked={isStudentCheck}
+                                        onChange={handleCheck}
                                     />
                                     <span>Acesso do Aluno</span>
                                 </label>
 
-                                <button type="submit">Alterar</button>
+                                {authenticationData === admin && (
+                                    <button type="submit">Alterar</button>
+                                )}
                             </fieldset>
                         </form>
 
-                        <button type="button">
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                        >
                             Sair
                         </button>
                     </nav>

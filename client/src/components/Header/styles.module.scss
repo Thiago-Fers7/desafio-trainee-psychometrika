@@ -55,6 +55,9 @@
 
                 border-radius: 0.8rem;
                 cursor: pointer;
+                user-select: none;
+
+                transition: 0.2s;
 
                 &:hover,
                 &.activeMenu {
@@ -82,6 +85,7 @@
                 background: var(--background-white);
                 box-shadow: 0px 2px 10px #5a676a26;
                 border-radius: 0.4rem;
+                display: none;
 
                 form {
                     padding: 1.6rem;
@@ -129,6 +133,35 @@
                     line-height: 1.6rem;
                     font-weight: 600;
                     color: var(--background-button);
+
+                    border-top: 1px solid var(--divi-sec);
+
+                    transition: background 0.2s;
+
+                    &:hover {
+                       background: var(--divi-sec);
+                    }
+                }
+            }
+
+            &.activeMenu {
+                .iconMenu {
+                    background: rgba(0, 0, 0, 0.103);
+                }
+
+                nav.menu {
+                    display: block;
+                    top: 3rem;
+                    opacity: 0;
+
+                    animation: show 0.2s forwards;
+                }
+
+                @keyframes show {
+                    to {
+                        top: 5.2rem;
+                        opacity: 1;
+                    }
                 }
             }
         }

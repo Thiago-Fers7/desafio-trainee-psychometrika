@@ -5,15 +5,24 @@
 }
 
 :root {
+    --prim-text: #242424;
     --sec-text: #424242;
+    --text-tertiary: #616161;
     --gray-light: hsla(0, 0%, 0%, 0.25);
     --background-button: #00718a;
     --background-white: white;
     --icons-tertiary: #5c939d;
+    --divi-sec: #f2f2f2;
+    --blue-light: #0683f9;
 }
 
 html {
     font-size: 62.5%
+}
+
+button, textarea, input, body {
+    font-family: sans-serif;
+    letter-spacing: 0.01rem;
 }
 
 @media (max-width: 1080px) {

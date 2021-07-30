@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api'
@@ -36,6 +36,10 @@ function Login() {
     const { handlwAuthentication } = useContext(UserContext)
 
     const history = useHistory()
+
+    useEffect(() => {
+        document.title = "Desafio Treinee | Login"
+    }, [])
 
     function toggleViewPass() {
         setViewPass(!viewPass)

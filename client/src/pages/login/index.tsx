@@ -77,7 +77,7 @@ function Login() {
                     email,
                     password
                 })
-                    .then((res) => {
+                    .then((res: AxiosResponse) => {
                         const data: ServerResponseLoginData = res.data
 
                         if (data.error) {
@@ -97,7 +97,7 @@ function Login() {
                         setIsLoading(false)
                     })
             } else {
-                throw 'Preencha todos os dados antes de prosseguir'
+                throw 'Preencha todos os campos antes de prosseguir'
             }
         } catch (err) {
             if (typeof err === 'string') {

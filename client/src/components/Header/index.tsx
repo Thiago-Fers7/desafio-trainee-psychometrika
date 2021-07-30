@@ -1,6 +1,11 @@
+import React from 'react'
 import styles from './styles.module.scss'
 
 function Header() {
+    function handleSubmit(event: React.FormEvent) {
+        event.preventDefault()
+    }
+
     return (
         <header className={styles.headerContainer}>
             <div className={styles.header}>
@@ -16,7 +21,7 @@ function Header() {
 
                     {/* Menu MODAL */}
                     <nav className={styles.menu}>
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <fieldset>
                                 <legend>Você está atualmente com</legend>
 

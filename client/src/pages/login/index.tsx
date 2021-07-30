@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api'
@@ -11,6 +11,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useStyles } from './iconsStyle'
 import { AxiosResponse } from 'axios';
+import { UserContext } from '../../contexts/UserContext';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>
 
@@ -31,6 +32,8 @@ function Login() {
 
     const [password, setPassword] = useState<string>('')
     const [isPassword, isSetPassword] = useState<boolean>(true)
+
+    const { handlwAuthentication } = useContext(UserContext)
 
     const history = useHistory()
 
@@ -80,6 +83,8 @@ function Login() {
                     .then((res: AxiosResponse) => {
                         const data: ServerResponseLoginData = res.data
 
+                        handlwAuthentication(String(data.authentication))
+
                         if (data.error) {
                             throw data.error
                         }
@@ -97,7 +102,7 @@ function Login() {
                         setIsLoading(false)
                     })
             } else {
-                throw 'Preencha todos os campos antes de prosseguir'
+                throw new Error('Preencha todos os campos antes de prosseguir')
             }
         } catch (err) {
             if (typeof err === 'string') {

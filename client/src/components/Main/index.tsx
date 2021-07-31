@@ -11,8 +11,8 @@ function Main() {
 
             <article className={styles.dashboardContainer}>
 
-                <Dashboard />
-
+                <Dashboard title="1º Série" />
+                <Dashboard title="2º Série" />
             </article>
         </main>
     )

@@ -18,6 +18,8 @@
     }
 
     .dashboardContainer {
+        display: flex;
+        gap: 4rem;
         max-width: 144rem;
         margin: 0 auto;
         padding: 3.2rem 6rem;

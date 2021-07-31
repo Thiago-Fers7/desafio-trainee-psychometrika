@@ -33,7 +33,7 @@ function Login() {
     const [password, setPassword] = useState<string>('')
     const [isPassword, isSetPassword] = useState<boolean>(true)
 
-    const { handlwAuthentication } = useContext(UserContext)
+    const { handleAuthentication, handleStudentVision } = useContext(UserContext)
 
     const history = useHistory()
 
@@ -87,15 +87,17 @@ function Login() {
                     .then((res: AxiosResponse) => {
                         const data: ServerResponseLoginData = res.data
 
-                        handlwAuthentication(String(data.authentication))
+                        handleAuthentication(String(data.authentication))
 
                         if (data.error) {
                             throw data.error
                         }
 
                         if (data.authentication === 'admin') {
+                            handleStudentVision(false)
                             history.push('/dashboard/admin')
                         } else if (data.authentication === 'student') {
+                            handleStudentVision(true)
                             history.push('/dashboard/student')
                         }
                     })

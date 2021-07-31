@@ -10,7 +10,7 @@ function Header() {
     const [isAdminCheck, setIsAdminCheck] = useState<boolean>(false)
     const [isStudentCheck, setIsStudentCheck] = useState<boolean>(false)
 
-    const { authenticationData } = useContext(UserContext)
+    const { authenticationData, handleStudentVision } = useContext(UserContext)
 
     const history = useHistory()
 
@@ -54,8 +54,12 @@ function Header() {
         event.preventDefault()
 
         if (isAdminCheck) {
+            handleStudentVision(false)
+            
             history.push('/dashboard/admin')
         } else if (isStudentCheck) {
+            handleStudentVision(true)
+
             history.push('/dashboard/student')
         }
     }

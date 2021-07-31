@@ -23,7 +23,9 @@ function Dashboard({ title }: ChildrenDataMod) {
     const [isDisabledInput, setIsDisabledInput] = useState<boolean>(true)
     const [isVisibleChapter, setIsVisibleChapter] = useState<boolean>(false)
 
-    const { isAdmin } = useContext(UserContext)
+    const { isAdminStudentVision } = useContext(UserContext)
+
+    console.log(isAdminStudentVision)
 
 
     function handleDashboardTitle(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -42,7 +44,7 @@ function Dashboard({ title }: ChildrenDataMod) {
                 <h3>{title}</h3>
 
                 <span>
-                    {isAdmin && (
+                    {!isAdminStudentVision && (
                         <>
                             {isReorderList ? (
                                 <img src="/images/reorder-enable.svg" alt="Reordenar" />
@@ -67,7 +69,7 @@ function Dashboard({ title }: ChildrenDataMod) {
                     />
 
                     <button type="submit">
-                        <img src="/images/edit-icon.svg" alt="Editar Título" />
+                        {!isAdminStudentVision && <img src="/images/edit-icon.svg" alt="Editar Título" />}
                     </button>
                 </form>
 
@@ -75,7 +77,7 @@ function Dashboard({ title }: ChildrenDataMod) {
                     return (
                         <div className={styles.chapterContainer} key={index}>
                             <span>
-                                {isAdmin && <img src="/images/move-icon.svg" alt="Mover" />}
+                                {!isAdminStudentVision && <img src="/images/move-icon.svg" alt="Mover" />}
                             </span>
 
                             <span className={styles.index}>
@@ -85,17 +87,15 @@ function Dashboard({ title }: ChildrenDataMod) {
                             <span className={styles.titleChapter}>{chapter}</span>
 
                             <div className={styles.icons}>
-                                <span>
-                                    {isAdmin && (
-                                        <>
-                                            {isVisibleChapter ? (
-                                                <img src="/images/view-disabled.svg" alt="Desabilitado Para Visualizar" />
-                                            ) : (
-                                                <img src="/images/view-enable.svg" alt="Habilitado Para Visualizar" />
-                                            )}
-                                        </>
-                                    )}
-                                </span>
+                                {!isAdminStudentVision && (
+                                    <span>
+                                        {isVisibleChapter ? (
+                                            <img src="/images/view-disabled.svg" alt="Desabilitado Para Visualizar" />
+                                        ) : (
+                                            <img src="/images/view-enable.svg" alt="Habilitado Para Visualizar" />
+                                        )}
+                                    </span>
+                                )}
                                 <span><img src="/images/open-chapter.svg" alt="Abrir" /></span>
                             </div>
                         </div>

@@ -1,10 +1,13 @@
 import pkg from '../../../userData.json'
+import pkg2 from '../../../chaptersData.json'
 const { adminsData, studentsData } = pkg
+const { chaptersContent } = pkg2
 
 import { admins, students } from '../usersModel'
+import { chapters } from '../chaptersModel'
 
 // Criando e inserindo dados no banco para que o sistema possa ser acessado sem um sistema de cadastro
-async function createAdmin() {
+function createAdmin() {
     // Adicionando admins de userData.json
     adminsData.forEach(async admin => {
         const isUser = await admins.findOne({ email: admin.email })
@@ -23,7 +26,7 @@ async function createAdmin() {
     })
 }
 
-async function createStudent() {
+function createStudent() {
     // Adicionando estudantes de userData.json
     studentsData.forEach(async student => {
         const isUser = await students.findOne({ email: student.email })
@@ -42,4 +45,23 @@ async function createStudent() {
     })
 }
 
-export { createAdmin, createStudent }
+function createChapters() {
+    // Adicionando capítulos de conteúdo de chaptersData.json
+    chaptersContent.forEach(async chapter => {
+        const isChapter = await chapters.findOne({ id: chapter.id })
+
+        if (!isChapter) {
+            chapters.create(chapter, function (err, doc) {
+                if (err) {
+                    throw err
+                }
+
+                console.log('Chapter created: ' + doc.id)
+            })
+        } else {
+            console.log('Chapter exists: ' + chapter.id)
+        }
+    })
+}
+
+export { createAdmin, createStudent, createChapters }

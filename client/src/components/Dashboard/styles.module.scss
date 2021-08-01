@@ -1,5 +1,5 @@
 .series {
-    width: 45.3rem;
+    min-width: 45.3rem;
 
     .titleSeries {
         display: flex;
@@ -41,12 +41,15 @@
             input {
                 font-size: 2.2rem;
                 font-weight: 600;
-                line-height: 2.4rem;
                 color: var(--sec-text);
                 background: transparent;
                 border: none;
                 outline: none;
                 cursor: text;
+
+                &.edit {
+                    opacity: 0.6;
+                }
             }
 
             button {
@@ -54,6 +57,7 @@
                 background: transparent;
                 border: none;
                 outline: none;
+                padding: 0.55rem;
 
                 img {
                     height: 1.3rem;

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { useContext } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 
@@ -25,13 +26,34 @@ function Dashboard({ title }: ChildrenDataMod) {
 
     const { isAdminStudentVision } = useContext(UserContext)
 
-    console.log(isAdminStudentVision)
-
+    const inputRef = useRef<HTMLInputElement>(null)
 
     function handleDashboardTitle(event: React.ChangeEvent<HTMLInputElement>): void {
-        const value = event.target.value
+        const value: string = event.target.value
 
-        setDashboardTitle(value)
+        if (value.length < 27) {
+            setDashboardTitle(value)
+        }
+    }
+
+    // Mudar Foco para Input
+    useEffect(() => {
+        if (!isDisabledInput)
+            inputRef.current?.focus()
+    }, [isDisabledInput])
+
+    function handleEditTitle(event: React.FormEvent) {
+        if (dashboardTitle.length === 0) {
+            alert("Informe ao menos um caractere")
+            inputRef.current?.focus()
+            return
+        }
+
+        if (!isDisabledInput) {
+            alert("Novo título salvo!")
+        }
+
+        setIsDisabledInput(!isDisabledInput)
     }
 
     function handleSubmit(event: React.FormEvent): void {
@@ -59,17 +81,26 @@ function Dashboard({ title }: ChildrenDataMod) {
             <div className={styles.dashboard}>
                 <form onSubmit={handleSubmit}>
                     <input
-                        style={{
-                            width: `${1.2 * dashboardTitle.length}rem`
-                        }}
                         type="text"
+                        ref={inputRef}
+                        autoComplete="off"
+                        size={dashboardTitle.length > 6 ? dashboardTitle.length - 5 : 2}
+                        className={!isDisabledInput ? styles.edit : ''}
                         value={dashboardTitle}
                         disabled={isDisabledInput}
                         onChange={handleDashboardTitle}
                     />
 
-                    <button type="submit">
-                        {!isAdminStudentVision && <img src="/images/edit-icon.svg" alt="Editar Título" />}
+                    <button type="submit" onClick={handleEditTitle}>
+                        {!isAdminStudentVision && (
+                            <>
+                                {isDisabledInput ? (
+                                    <img src="/images/edit-icon.svg" alt="Editar Título" />
+                                ) : (
+                                    <img src="/images/confirm-edit-icon.svg" alt="Editar Título" />
+                                )}
+                            </>
+                        )}
                     </button>
                 </form>
 

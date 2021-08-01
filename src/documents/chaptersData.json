@@ -1,0 +1,120 @@
+{
+    "seriesData": [
+        {
+            "chaptersContent": [
+                {
+                    "id": "chap0",
+                    "index": 0,
+                    "view": true,
+                    "content": {
+                        "title": "Conjutos numéricos",
+                        "text": "Os Conjutos numéricos..."
+                    }
+                },
+                {
+                    "id": "chap1",
+                    "index": 1,
+                    "view": true,
+                    "content": {
+                        "title": "Conjutos",
+                        "text": "Os Conjutos..."
+                    }
+                },
+                {
+                    "id": "chap2",
+                    "index": 2,
+                    "view": true,
+                    "content": {
+                        "title": "Relação a introdução às funções",
+                        "text": "Relação a introdução às funções..."
+                    }
+                },
+                {
+                    "id": "chap3",
+                    "index": 3,
+                    "view": true,
+                    "content": {
+                        "title": "Função constante e função afim",
+                        "text": "Função constante e função afim..."
+                    }
+                },
+                {
+                    "id": "chap4",
+                    "index": 4,
+                    "view": true,
+                    "content": {
+                        "title": "Função quadrática ou função polinomial do 2º grau",
+                        "text": "Função quadrática ou função polinomial do 2º grau..."
+                    }
+                },
+                {
+                    "id": "chap5",
+                    "index": 5,
+                    "view": true,
+                    "content": {
+                        "title": "Complemento sobre a teoria das funções",
+                        "text": "Complemento sobre a teoria das funções..."
+                    }
+                }
+            ]
+        },
+        {
+            "chaptersContent": [
+                {
+                    "id": "chap00",
+                    "index": 0,
+                    "view": true,
+                    "content": {
+                        "title": "Revisão: conjuntos",
+                        "text": "Revisão: conjuntos..."
+                    }
+                },
+                {
+                    "id": "chap1",
+                    "index": 1,
+                    "view": true,
+                    "content": {
+                        "title": "Princípios de análise combinatória",
+                        "text": "Princípios de análise combinatória..."
+                    }
+                },
+                {
+                    "id": "chap02",
+                    "index": 2,
+                    "view": true,
+                    "content": {
+                        "title": "Formas de contagem",
+                        "text": "Formas de contagem..."
+                    }
+                },
+                {
+                    "id": "chap03",
+                    "index": 3,
+                    "view": true,
+                    "content": {
+                        "title": "Binômio de Newton e triângulo de Pascal",
+                        "text": "Binômio de Newton e triângulo de Pascal..."
+                    }
+                },
+                {
+                    "id": "chap04",
+                    "index": 4,
+                    "view": true,
+                    "content": {
+                        "title": "Probabilidade",
+                        "text": "Probabilidade..."
+                    }
+                },
+                {
+                    "id": "chap05",
+                    "index": 5,
+                    "view": true,
+                    "content": {
+                        "title": "Conceitos elementares de Geometria Analítica",
+                        "text": "Conceitos elementares de Geometria Analítica..."
+                    }
+                }
+            ]
+        }
+    ]
+}

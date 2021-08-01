@@ -1,13 +1,12 @@
-import { api } from '../../services/api'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { Dashboard } from "../Dashboard"
+import { ChaptersContext } from '../../contexts/ChaptersContext'
 
 import styles from './styles.module.scss'
-import { AxiosResponse } from 'axios'
 
 interface ChapterData {
-    chaptersContent: [
+    allChaptersInOrder: [
         content: {
             title: string,
             text: string
@@ -23,23 +22,9 @@ interface ChapterData {
 }
 
 function Main() {
-    const [allChapters, setAllChapters] = useState<ChapterData[]>({} as ChapterData[])
+    const { getAllChapters, allChapters, isChapters } = useContext(ChaptersContext)
 
     useEffect(() => {
-        async function getAllChapters() {
-            const res: AxiosResponse = await api.get('/chapters')
-
-            const data = res.data
-
-            console.log(data)
-
-            // if (data) {
-            //     setAllChapters(data)
-            // } else {
-            //     throw 'Chapters not found'
-            // }
-        }
-
         try {
             getAllChapters()
         } catch (error) {
@@ -54,9 +39,7 @@ function Main() {
             </header>
 
             <article className={styles.dashboardContainer}>
-
-                <Dashboard title="1º Série" />
-                <Dashboard title="2º Série" />
+                {isChapters && allChapters.map((chapter: ChapterData, index: number) =>  <Dashboard key={index} chapter={chapter} />)}
             </article>
         </main>
     )

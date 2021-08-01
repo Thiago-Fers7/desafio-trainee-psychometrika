@@ -16,7 +16,6 @@ const chapterController = {
                 error: err
             })
         }
-
     }
 }
 

@@ -5,11 +5,27 @@ import { UserContext } from '../../contexts/UserContext'
 
 import styles from './styles.module.scss'
 
-interface ChildrenDataMod {
-    title: string
+interface ChapterData {
+    allChaptersInOrder: [
+        content: {
+            title: string,
+            text: string
+        },
+        classTitle: string,
+        _id: string,
+        id: string,
+        index: number,
+        view: boolean,
+        createdAt: string,
+        updatedAt: string,
+    ]
 }
 
-function Dashboard({ title }: ChildrenDataMod) {
+interface ChildrenDataMod {
+    chapter: ChapterData
+}
+
+function Dashboard({ chapter }: ChildrenDataMod) {
     const titleDash: string = 'Frente A'
     const fakeArrayChapters: string[] = [
         'Conjuntos numéricos',
@@ -63,7 +79,7 @@ function Dashboard({ title }: ChildrenDataMod) {
     return (
         <section className={styles.series}>
             <div className={styles.titleSeries}>
-                <h3>{title}</h3>
+                <h3>{'title'}</h3>
 
                 <span>
                     {!isAdminStudentVision && (

@@ -1,0 +1,26 @@
+{
+    "studentsData": [
+        {
+            "email": "thiago@email.com",
+            "password": "psychostudent"
+        },
+        {
+            "email": "luiz@email.com",
+            "password": "psychostudent"
+        },
+        {
+            "email": "santos@email.com",
+            "password": "psychostudent"
+        }
+    ],
+    "adminsData": [
+        {
+            "email": "admin@email.com",
+            "password": "psychoadmin"
+        },
+        {
+            "email": "admin2@email.com",
+            "password": "psychoadmin"
+        }
+    ]
+}

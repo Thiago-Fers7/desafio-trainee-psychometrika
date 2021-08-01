@@ -1,10 +1,13 @@
 import express from 'express'
 import { routes } from './routes'
-import { createStudent } from './models/createUsersCollection/createStudent'
-import { createAdmin } from './models/createUsersCollection/createAdmin'
+import { createAdmin, createStudent } from './models/createCollections'
+import { mongoose } from './models/database'
+
 import cors from 'cors'
 
 const port = 3333
+
+mongoose
 
 createStudent()
 createAdmin()

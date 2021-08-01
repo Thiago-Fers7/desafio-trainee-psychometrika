@@ -3,24 +3,26 @@ import { AxiosResponse } from 'axios'
 import { api } from "../services/api";
 
 interface ChapterData {
-    allChaptersInOrder: [
-        content: {
-            title: string,
-            text: string
-        },
-        classTitle: string,
-        _id: string,
-        id: string,
-        index: number,
-        view: boolean,
-        createdAt: string,
-        updatedAt: string,
-    ]
+    content: {
+        title: string,
+        text: string
+    },
+    _id: string,
+    id: string,
+    index: number,
+    view: boolean,
+    createdAt: string,
+    updatedAt: string,
+    __v?: number
+}
+
+interface AllChapterData {
+    allChaptersInOrder: ChapterData[]
 }
 
 interface ChaptersContextData {
     getAllChapters: () => Promise<void>,
-    allChapters: ChapterData[],
+    allChapters: AllChapterData[],
     isChapters: boolean
 }
 
@@ -30,15 +32,16 @@ export const ChaptersContext = createContext({} as ChaptersContextData)
 type ChaptersContextProviderProps = { children: ReactNode }
 
 export function ChaptersContextProvider({ children }: ChaptersContextProviderProps) {
-    const [allChapters, setAllChapters] = useState<ChapterData[]>({} as ChapterData[])
+    const [allChapters, setAllChapters] = useState<AllChapterData[]>({} as AllChapterData[])
     const [isChapters, setIsChapters] = useState<boolean>(false)
 
     async function getAllChapters(): Promise<void> {
         const res: AxiosResponse = await api.get('/chapters')
 
-        const data = res.data
+        const data: AllChapterData[] = res.data
 
         if (data) {
+            console.log(data)
             setAllChapters(data)
             setIsChapters(true)
         } else {

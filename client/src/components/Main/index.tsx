@@ -6,19 +6,21 @@ import { ChaptersContext } from '../../contexts/ChaptersContext'
 import styles from './styles.module.scss'
 
 interface ChapterData {
-    allChaptersInOrder: [
-        content: {
-            title: string,
-            text: string
-        },
-        classTitle: string,
-        _id: string,
-        id: string,
-        index: number,
-        view: boolean,
-        createdAt: string,
-        updatedAt: string,
-    ]
+    content: {
+        title: string,
+        text: string
+    },
+    _id: string,
+    id: string,
+    index: number,
+    view: boolean,
+    createdAt: string,
+    updatedAt: string,
+    __v?: number
+}
+
+interface AllChapterData {
+    allChaptersInOrder: ChapterData[]
 }
 
 function Main() {
@@ -39,7 +41,7 @@ function Main() {
             </header>
 
             <article className={styles.dashboardContainer}>
-                {isChapters && allChapters.map((chapter: ChapterData, index: number) =>  <Dashboard key={index} chapter={chapter} />)}
+                {isChapters && allChapters.map((chapter: AllChapterData, index: number) => <Dashboard key={index} chapter={chapter} index={index} />)}
             </article>
         </main>
     )

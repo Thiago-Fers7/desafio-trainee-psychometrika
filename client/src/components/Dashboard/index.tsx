@@ -5,36 +5,34 @@ import { UserContext } from '../../contexts/UserContext'
 
 import styles from './styles.module.scss'
 
+
 interface ChapterData {
-    allChaptersInOrder: [
-        content: {
-            title: string,
-            text: string
-        },
-        classTitle: string,
-        _id: string,
-        id: string,
-        index: number,
-        view: boolean,
-        createdAt: string,
-        updatedAt: string,
-    ]
+    content: {
+        title: string,
+        text: string
+    },
+    _id: string,
+    id: string,
+    index: number,
+    view: boolean,
+    createdAt: string,
+    updatedAt: string,
+    __v?: number
+}
+
+interface AllChapterData {
+    allChaptersInOrder: ChapterData[]
 }
 
 interface ChildrenDataMod {
-    chapter: ChapterData
+    chapter: AllChapterData,
+    index: number
 }
 
-function Dashboard({ chapter }: ChildrenDataMod) {
-    const titleDash: string = 'Frente A'
-    const fakeArrayChapters: string[] = [
-        'Conjuntos numéricos',
-        'Conjuntos',
-        'Relações e intrdução às funções',
-        'Função constante e função afim'
-    ]
+function Dashboard({ chapter, index }: ChildrenDataMod) {
+    const [dashboardChapter, setDashboardChapter] = useState<ChapterData[]>(chapter.allChaptersInOrder)
 
-    const [dashboardTitle, setDashboardTitle] = useState<string>(titleDash)
+    const [aFront, setAFront] = useState<string>('Frente A')
 
     const [isReorderList, setIsReorderList] = useState<boolean>(false)
     const [isDisabledInput, setIsDisabledInput] = useState<boolean>(true)
@@ -48,7 +46,7 @@ function Dashboard({ chapter }: ChildrenDataMod) {
         const value: string = event.target.value
 
         if (value.length < 27) {
-            setDashboardTitle(value)
+            setAFront(value)
         }
     }
 
@@ -59,7 +57,7 @@ function Dashboard({ chapter }: ChildrenDataMod) {
     }, [isDisabledInput])
 
     function handleEditTitle(event: React.FormEvent) {
-        if (dashboardTitle.length === 0) {
+        if (aFront.length === 0) {
             alert("Informe ao menos um caractere")
             inputRef.current?.focus()
             return
@@ -79,7 +77,7 @@ function Dashboard({ chapter }: ChildrenDataMod) {
     return (
         <section className={styles.series}>
             <div className={styles.titleSeries}>
-                <h3>{'title'}</h3>
+                <h3>{`${index + 1}ª Série`}</h3>
 
                 <span>
                     {!isAdminStudentVision && (
@@ -100,9 +98,9 @@ function Dashboard({ chapter }: ChildrenDataMod) {
                         type="text"
                         ref={inputRef}
                         autoComplete="off"
-                        size={dashboardTitle.length > 6 ? dashboardTitle.length - 5 : 2}
+                        size={aFront.length > 6 ? aFront.length - 5 : 2}
                         className={!isDisabledInput ? styles.edit : ''}
-                        value={dashboardTitle}
+                        value={aFront}
                         disabled={isDisabledInput}
                         onChange={handleDashboardTitle}
                     />
@@ -120,7 +118,7 @@ function Dashboard({ chapter }: ChildrenDataMod) {
                     </button>
                 </form>
 
-                {fakeArrayChapters.map((chapter: string, index: number) => {
+                {dashboardChapter.map((chapter: ChapterData, index: number) => {
                     return (
                         <div className={styles.chapterContainer} key={index}>
                             <span>
@@ -131,7 +129,7 @@ function Dashboard({ chapter }: ChildrenDataMod) {
                                 <span>{index + 1}</span>
                             </span>
 
-                            <span className={styles.titleChapter}>{chapter}</span>
+                            <span className={styles.titleChapter}>{chapter.content.title}</span>
 
                             <div className={styles.icons}>
                                 {!isAdminStudentVision && (

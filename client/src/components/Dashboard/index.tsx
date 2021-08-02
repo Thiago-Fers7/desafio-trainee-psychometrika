@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
+import { useReducer } from 'react'
 import { useContext } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 
@@ -30,13 +31,38 @@ interface ChildrenDataMod {
 }
 
 function Dashboard({ chapter, index }: ChildrenDataMod) {
-    const [dashboardChapter, setDashboardChapter] = useState<ChapterData[]>(chapter.allChaptersInOrder)
+    function reducer(state: ChapterData[], action: { type: string, value: any, index: number }) {
+        switch (action.type) {
+            case 'view':
+                state[action.index].view = action.value
+                state[action.index].index = !action.value ? NaN : action.index
+
+                let count: number = 0
+                state.forEach((obj: ChapterData, index: number) => {
+                    if (!isNaN(state[index].index)) {
+                        state[index].index = count
+                        count++
+                    }
+                })
+
+                console.log(state)
+
+                return [
+                    ...state
+                ]
+            default:
+                return [
+                    ...state
+                ]
+        }
+    }
+
+    const [dashboardReducer, setDashboardReducer] = useReducer(reducer, chapter.allChaptersInOrder)
 
     const [aFront, setAFront] = useState<string>('Frente A')
 
     const [isReorderList, setIsReorderList] = useState<boolean>(false)
     const [isDisabledInput, setIsDisabledInput] = useState<boolean>(true)
-    const [isVisibleChapter, setIsVisibleChapter] = useState<boolean>(false)
 
     const { isAdminStudentVision } = useContext(UserContext)
 
@@ -68,6 +94,12 @@ function Dashboard({ chapter, index }: ChildrenDataMod) {
         }
 
         setIsDisabledInput(!isDisabledInput)
+    }
+
+    function handleHide(index: number): void {
+        setDashboardReducer({ type: 'view', value: !dashboardReducer[index].view, index })
+
+
     }
 
     function handleSubmit(event: React.FormEvent): void {
@@ -118,23 +150,23 @@ function Dashboard({ chapter, index }: ChildrenDataMod) {
                     </button>
                 </form>
 
-                {dashboardChapter.map((chapter: ChapterData, index: number) => {
+                {dashboardReducer.map((chapter: ChapterData, index: number) => {
                     return (
-                        <div className={styles.chapterContainer} key={index}>
+                        <div className={`${styles.chapterContainer} ${!chapter.view ? styles.scratched : ''}`} key={index}>
                             <span>
                                 {!isAdminStudentVision && <img src="/images/move-icon.svg" alt="Mover" />}
                             </span>
 
                             <span className={styles.index}>
-                                <span>{index + 1}</span>
+                                <span>{!isNaN(chapter.index) ? chapter.index + 1 : ''}</span>
                             </span>
 
                             <span className={styles.titleChapter}>{chapter.content.title}</span>
 
                             <div className={styles.icons}>
                                 {!isAdminStudentVision && (
-                                    <span>
-                                        {isVisibleChapter ? (
+                                    <span onClick={() => handleHide(index)}>
+                                        {!chapter.view ? (
                                             <img src="/images/view-disabled.svg" alt="Desabilitado Para Visualizar" />
                                         ) : (
                                             <img src="/images/view-enable.svg" alt="Habilitado Para Visualizar" />

@@ -19,6 +19,7 @@
 
     .dashboardContainer {
         display: flex;
+        flex-wrap: wrap;
         gap: 4rem;
         max-width: 144rem;
         margin: 0 auto;

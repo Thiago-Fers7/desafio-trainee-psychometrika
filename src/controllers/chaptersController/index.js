@@ -2,6 +2,8 @@ import { series } from '../../models/chaptersModel'
 
 const chapterController = {
     async allChapters(req, res) {
+        console.log('entrou')
+
         try {
             const allSeries = await Promise.all(series.map(async (colletion, index) => {
                 const allChaptersInOrder = await colletion.find().sort({ index: 1 })

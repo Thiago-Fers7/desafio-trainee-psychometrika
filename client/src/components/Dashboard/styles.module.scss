@@ -75,6 +75,15 @@
             border-radius: 0.4rem;
             background: var(--gray-light);
 
+            transition: background 0.1s;
+
+            &.scratched {
+                background: var(--gray-light-25);
+                .titleChapter {
+                    text-decoration: line-through;
+                }
+            }
+
             & > span:first-child {
                 cursor: grab;
                 display: grid;
@@ -113,6 +122,8 @@
                     border-radius: 50%;
                     display: grid;
                     place-items: center;
+                    cursor: pointer;
+                    user-select: none;
 
                     img {
                         width: 1.6rem;

@@ -41,7 +41,6 @@ export function ChaptersContextProvider({ children }: ChaptersContextProviderPro
         const data: AllChapterData[] = res.data
 
         if (data) {
-            console.log(data)
             setAllChapters(data)
             setIsChapters(true)
         } else {

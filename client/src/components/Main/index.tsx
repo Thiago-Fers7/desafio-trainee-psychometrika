@@ -13,7 +13,7 @@ interface ChapterData {
     _id: string,
     id: string,
     index: {
-        currentIndex: number | null,
+        currentIndex: number,
         permanentIndex: number
     },
     view: boolean,

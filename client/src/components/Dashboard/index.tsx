@@ -1,11 +1,12 @@
 import { AxiosResponse } from 'axios'
-import React, { useRef, useState } from 'react'
+import React, { DragEventHandler, useRef, useState } from 'react'
 import { useEffect, useReducer, useContext } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import { api } from '../../services/api'
 
-import styles from './styles.module.scss'
+import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DraggableProvided } from 'react-beautiful-dnd'
 
+import styles from './styles.module.scss'
 
 interface ChapterData {
     content: {
@@ -15,7 +16,7 @@ interface ChapterData {
     _id: string,
     id: string,
     index: {
-        currentIndex: number | null,
+        currentIndex: number,
         permanentIndex: number
     },
     view: boolean,
@@ -46,19 +47,44 @@ interface ChildrenDataMod {
 
 function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     function reducer(state: ChapterData[], action: { type: string, value: any, index: number }) {
+
+        function reorder(isView: boolean[]) {
+            console.log(isView)
+            let count: number = 0
+            for (let i = 0; i < state.length; i++) {
+                if (isView) {
+                    state[i].index.currentIndex = count
+                    count++
+                }
+            }
+        }
+
         switch (action.type) {
             case 'view':
                 state[action.index].view = action.value
-                state[action.index].index.currentIndex = !action.value ? null : action.index
+                state[action.index].index.currentIndex = action.index
 
-                let count: number = 0
+                let updateCurrentIndex: boolean[] = []
 
-                for (let i = 0; i < state.length; i++) {
-                    if (typeof state[i].index.currentIndex === 'number') {
-                        state[i].index.currentIndex = count
-                        count++
-                    }
-                }
+                state.forEach((e: ChapterData) => {
+                    updateCurrentIndex.push(e.view)
+                })
+
+                reorder(updateCurrentIndex)
+
+                return [
+                    ...state
+                ]
+            case 'update':
+                state = action.value
+
+                const updateIndex: boolean[] = []
+
+                state.forEach((e: ChapterData) => {
+                    updateIndex.push(true)
+                })
+
+                reorder(updateIndex)
 
                 return [
                     ...state
@@ -111,7 +137,6 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
         setIsDisabledInput(!isDisabledInput)
     }
 
-
     useEffect(() => {
         const toDbChapter: ChapterDataForDb[] = dashboardReducer.map((data: ChapterData) => {
             return {
@@ -140,6 +165,17 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
         })()
 
     }, [dashboardReducer, serieIndex])
+
+    function handleOnDragEnd(action: DropResult) {
+        if (!action.destination)
+            return
+
+        const items = Array.from(dashboardReducer)
+        const [reorderedItem] = items.splice(action.source.index, 1)
+        items.splice(action.destination.index, 0, reorderedItem)
+
+        setDashboardReducer({ type: 'update', value: items, index: serieIndex })
+    }
 
     function handleHide(idx: number): void {
         setDashboardReducer({ type: 'view', value: !dashboardReducer[idx].view, index: idx })
@@ -193,32 +229,49 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                     </button>
                 </form>
 
-                {dashboardReducer.map((chapter: ChapterData, index: number) => {
-                    return (
-                        <div className={`${styles.chapterContainer} ${!chapter.view ? styles.scratched : ''}`} key={index}>
-                            <span>
-                                {!isAdminStudentVision && <img src="/images/move-icon.svg" alt="Mover" />}
-                            </span>
-                            <span className={styles.index}>
-                                <span>{typeof chapter.index.currentIndex === 'number' ? chapter.index.currentIndex + 1 : ''}</span>
-                            </span>
-                            <span className={styles.titleChapter}>{chapter.content.title}</span>
-                            <div className={styles.icons}>
-                                {!isAdminStudentVision && (
-                                    <span onClick={() => handleHide(index)}>
-                                        {!chapter.view ? (
-                                            <img src="/images/view-disabled.svg" alt="Desabilitado Para Visualizar" />
-                                        ) : (
-                                            <img src="/images/view-enable.svg" alt="Habilitado Para Visualizar" />
-                                        )}
-                                    </span>
-                                )}
-                                <span><img src="/images/open-chapter.svg" alt="Abrir" /></span>
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Droppable droppableId="dragDashboard">
+                        {(provided: DroppableProvided) => (
+                            <div className={styles.dropContainer} {...provided.droppableProps} ref={provided.innerRef}>
+                                {dashboardReducer.map((chapter: ChapterData, index: number) => {
+                                    return (
+                                        <Draggable key={chapter.id} draggableId={chapter.id} index={index}>
+                                            {(provided: DraggableProvided) => (
+                                                <div
+                                                    className={`${styles.chapterContainer} ${!chapter.view ? styles.scratched : ''}`}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    ref={provided.innerRef}
+                                                >
+                                                    <span>
+                                                        {!isAdminStudentVision && <img src="/images/move-icon.svg" alt="Mover" />}
+                                                    </span>
+                                                    <span className={styles.index}>
+                                                        <span>{chapter.view ? chapter.index.currentIndex + 1 : ''}</span>
+                                                    </span>
+                                                    <span className={styles.titleChapter}>{chapter.content.title}</span>
+                                                    <div className={styles.icons}>
+                                                        {!isAdminStudentVision && (
+                                                            <span onClick={() => handleHide(index)}>
+                                                                {!chapter.view ? (
+                                                                    <img src="/images/view-disabled.svg" alt="Desabilitado Para Visualizar" />
+                                                                ) : (
+                                                                    <img src="/images/view-enable.svg" alt="Habilitado Para Visualizar" />
+                                                                )}
+                                                            </span>
+                                                        )}
+                                                        <span><img src="/images/open-chapter.svg" alt="Abrir" /></span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    )
+                                })}
+                                {provided.placeholder}
                             </div>
-                        </div>
-                    )
-
-                })}
+                        )}
+                    </Droppable>
+                </DragDropContext>
             </div>
         </section>
     )

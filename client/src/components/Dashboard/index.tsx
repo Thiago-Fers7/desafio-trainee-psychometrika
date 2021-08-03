@@ -1,8 +1,9 @@
+import { AxiosResponse } from 'axios'
 import React, { useRef, useState } from 'react'
-import { useEffect } from 'react'
-import { useReducer } from 'react'
-import { useContext } from 'react'
+import { useEffect, useReducer, useContext } from 'react'
+import { ChaptersContext } from '../../contexts/ChaptersContext'
 import { UserContext } from '../../contexts/UserContext'
+import { api } from '../../services/api'
 
 import styles from './styles.module.scss'
 
@@ -14,11 +15,25 @@ interface ChapterData {
     },
     _id: string,
     id: string,
-    index: number,
+    index: {
+        currentIndex: number | null,
+        permanentIndex: number
+    },
     view: boolean,
     createdAt: string,
     updatedAt: string,
     __v?: number
+}
+
+interface ChapterDataForDb {
+    id: string,
+    att: {
+        view: boolean,
+        index: {
+            permanentIndex: number,
+            currentIndex: number | null
+        }
+    }
 }
 
 interface AllChapterData {
@@ -27,25 +42,24 @@ interface AllChapterData {
 
 interface ChildrenDataMod {
     chapter: AllChapterData,
-    index: number
+    serieIndex: number
 }
 
-function Dashboard({ chapter, index }: ChildrenDataMod) {
+function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     function reducer(state: ChapterData[], action: { type: string, value: any, index: number }) {
         switch (action.type) {
             case 'view':
                 state[action.index].view = action.value
-                state[action.index].index = !action.value ? NaN : action.index
+                state[action.index].index.currentIndex = !action.value ? null : action.index
 
                 let count: number = 0
-                state.forEach((obj: ChapterData, index: number) => {
-                    if (!isNaN(state[index].index)) {
-                        state[index].index = count
+
+                for (let i = 0; i < state.length; i++) {
+                    if (typeof state[i].index.currentIndex === 'number') {
+                        state[i].index.currentIndex = count
                         count++
                     }
-                })
-
-                console.log(state)
+                }
 
                 return [
                     ...state
@@ -65,6 +79,8 @@ function Dashboard({ chapter, index }: ChildrenDataMod) {
     const [isDisabledInput, setIsDisabledInput] = useState<boolean>(true)
 
     const { isAdminStudentVision } = useContext(UserContext)
+
+    const [isSending, setIsSending] = useState<boolean>(false)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -96,10 +112,39 @@ function Dashboard({ chapter, index }: ChildrenDataMod) {
         setIsDisabledInput(!isDisabledInput)
     }
 
-    function handleHide(index: number): void {
-        setDashboardReducer({ type: 'view', value: !dashboardReducer[index].view, index })
 
+    useEffect(() => {
+        (async () => {
+            const toDbChapter: ChapterDataForDb[] = dashboardReducer.map((data: ChapterData) => {
+                return {
+                    id: data._id,
+                    att: {
+                        view: data.view,
+                        index: {
+                            permanentIndex: data.index.permanentIndex,
+                            currentIndex: data.index.currentIndex
+                        }
+                    }
+                }
+            })
 
+            setIsSending(true)
+
+            await api.put('/chapters', { toDbChapter, serieIndex })
+                .then((res: AxiosResponse) => {
+                    console.log(res.data.res)
+                })
+                .catch(err => {
+                    console.error("Sending failed" + err)
+                }).finally(() => {
+                    setIsSending(false)
+                })
+        })()
+
+    }, [dashboardReducer])
+
+    function handleHide(idx: number): void {
+        setDashboardReducer({ type: 'view', value: !dashboardReducer[idx].view, index: idx })
     }
 
     function handleSubmit(event: React.FormEvent): void {
@@ -109,7 +154,7 @@ function Dashboard({ chapter, index }: ChildrenDataMod) {
     return (
         <section className={styles.series}>
             <div className={styles.titleSeries}>
-                <h3>{`${index + 1}ª Série`}</h3>
+                <h3>{`${serieIndex + 1}ª Série`}</h3>
 
                 <span>
                     {!isAdminStudentVision && (
@@ -156,13 +201,10 @@ function Dashboard({ chapter, index }: ChildrenDataMod) {
                             <span>
                                 {!isAdminStudentVision && <img src="/images/move-icon.svg" alt="Mover" />}
                             </span>
-
                             <span className={styles.index}>
-                                <span>{!isNaN(chapter.index) ? chapter.index + 1 : ''}</span>
+                                <span>{typeof chapter.index.currentIndex === 'number' ? chapter.index.currentIndex + 1 : ''}</span>
                             </span>
-
                             <span className={styles.titleChapter}>{chapter.content.title}</span>
-
                             <div className={styles.icons}>
                                 {!isAdminStudentVision && (
                                     <span onClick={() => handleHide(index)}>
@@ -177,6 +219,7 @@ function Dashboard({ chapter, index }: ChildrenDataMod) {
                             </div>
                         </div>
                     )
+
                 })}
             </div>
         </section>

@@ -80,7 +80,7 @@ function Login() {
             if (!isEmail && !isPassword) {
                 setIsLoading(true)
 
-                await api.post('login', {
+                await api.post('/login', {
                     email,
                     password
                 })

@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react'
-
 import { Dashboard } from "../Dashboard"
-import { ChaptersContext } from '../../contexts/ChaptersContext'
 
+import { useEffect, useState } from "react"
 import styles from './styles.module.scss'
+import { AxiosResponse } from 'axios'
+import { api } from '../../services/api'
 
 interface ChapterData {
     content: {
@@ -12,7 +12,10 @@ interface ChapterData {
     },
     _id: string,
     id: string,
-    index: number,
+    index: {
+        currentIndex: number | null,
+        permanentIndex: number
+    },
     view: boolean,
     createdAt: string,
     updatedAt: string,
@@ -24,26 +27,37 @@ interface AllChapterData {
 }
 
 function Main() {
-    const { getAllChapters, allChapters, isChapters } = useContext(ChaptersContext)
+    const [allChapters, setAllChapters] = useState<AllChapterData[]>({} as AllChapterData[])
+    const [isChapters, setIsChapters] = useState<boolean>(false)
 
     useEffect(() => {
-        try {
-            getAllChapters()
-        } catch (error) {
-            console.log(error)
-        }
+        (async () => {
+            const res: AxiosResponse = await api.get('/chapters')
+
+            const data: AllChapterData[] = res.data
+
+            if (data) {
+                setAllChapters(data)
+                setIsChapters(true)
+            } else {
+                throw 'Chapters not found'
+            }
+        })()
     }, [])
 
     return (
-        <main className={styles.container}>
-            <header>
-                <h2>Nome da Escola</h2>
-            </header>
-
-            <article className={styles.dashboardContainer}>
-                {isChapters && allChapters.map((chapter: AllChapterData, index: number) => <Dashboard key={index} chapter={chapter} index={index} />)}
-            </article>
-        </main>
+        <>
+            {isChapters && (
+                <main className={styles.container}>
+                    <header>
+                        <h2>Nome da Escola</h2>
+                    </header>
+                    <article className={styles.dashboardContainer}>
+                        {allChapters.map((chapter: AllChapterData, index: number) => <Dashboard key={index} chapter={chapter} serieIndex={index} />)}
+                    </article>
+                </main>
+            )}
+        </>
     )
 }
 

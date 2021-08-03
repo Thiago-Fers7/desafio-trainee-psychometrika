@@ -37,7 +37,7 @@ function Header() {
                 setIsStudentCheck(true)
                 break
             default:
-                alert("Tipo de usuário não disponível")
+                console.log("Tipo de usuário não disponível")
                 break
         }
     }

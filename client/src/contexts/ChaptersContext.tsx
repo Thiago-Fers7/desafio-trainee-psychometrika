@@ -9,7 +9,10 @@ interface ChapterData {
     },
     _id: string,
     id: string,
-    index: number,
+    index: {
+        currentIndex: number | null,
+        permanentIndex: number
+    },
     view: boolean,
     createdAt: string,
     updatedAt: string,
@@ -20,39 +23,29 @@ interface AllChapterData {
     allChaptersInOrder: ChapterData[]
 }
 
-interface ChaptersContextData {
-    getAllChapters: () => Promise<void>,
-    allChapters: AllChapterData[],
-    isChapters: boolean
+interface ChapterDataForDb {
+    id: string,
+    att: {
+        view: boolean,
+        index: {
+            permanentIndex: number,
+            currentIndex: number | null
+        }
+    }
 }
 
+interface ChaptersContextData {
+}
 
 export const ChaptersContext = createContext({} as ChaptersContextData)
 
 type ChaptersContextProviderProps = { children: ReactNode }
 
 export function ChaptersContextProvider({ children }: ChaptersContextProviderProps) {
-    const [allChapters, setAllChapters] = useState<AllChapterData[]>({} as AllChapterData[])
-    const [isChapters, setIsChapters] = useState<boolean>(false)
-
-    async function getAllChapters(): Promise<void> {
-        const res: AxiosResponse = await api.get('/chapters')
-
-        const data: AllChapterData[] = res.data
-
-        if (data) {
-            setAllChapters(data)
-            setIsChapters(true)
-        } else {
-            throw 'Chapters not found'
-        }
-    }
 
     return (
         <ChaptersContext.Provider value={{
-            getAllChapters,
-            allChapters,
-            isChapters
+
         }}>
             {children}
         </ChaptersContext.Provider>

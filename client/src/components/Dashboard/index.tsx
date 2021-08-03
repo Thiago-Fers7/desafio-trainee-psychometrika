@@ -49,10 +49,10 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     function reducer(state: ChapterData[], action: { type: string, value: any, index: number }) {
 
         function reorder(isView: boolean[]) {
-            console.log(isView)
             let count: number = 0
+
             for (let i = 0; i < state.length; i++) {
-                if (isView) {
+                if (isView[i]) {
                     state[i].index.currentIndex = count
                     count++
                 }
@@ -84,7 +84,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                     updateIndex.push(true)
                 })
 
-                reorder(updateIndex)
+                const newState = reorder(updateIndex)
 
                 return [
                     ...state

@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react"
 import { Dashboard } from "../Dashboard"
 
-import { useEffect, useState } from "react"
 import styles from './styles.module.scss'
 import { AxiosResponse } from 'axios'
 import { api } from '../../services/api'
@@ -31,16 +31,20 @@ function Main() {
     const [isChapters, setIsChapters] = useState<boolean>(false)
 
     useEffect(() => {
-        (async () => {
-            const res: AxiosResponse = await api.get('/chapters')
+        ; (async () => {
+            try {
+                const res: AxiosResponse = await api.get('/chapters')
 
-            const data: AllChapterData[] = res.data
+                const data: AllChapterData[] = res.data
 
-            if (data) {
-                setAllChapters(data)
-                setIsChapters(true)
-            } else {
-                throw 'Chapters not found'
+                if (data) {
+                    setAllChapters(data)
+                    setIsChapters(true)
+                } else {
+                    throw new Error('Chapters not found')
+                }
+            } catch (error) {
+                console.log(error)
             }
         })()
     }, [])

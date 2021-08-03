@@ -1,38 +1,36 @@
-import { createContext, ReactNode, useState } from "react";
-import { AxiosResponse } from 'axios'
-import { api } from "../services/api";
+import { createContext, ReactNode } from "react";
 
-interface ChapterData {
-    content: {
-        title: string,
-        text: string
-    },
-    _id: string,
-    id: string,
-    index: {
-        currentIndex: number | null,
-        permanentIndex: number
-    },
-    view: boolean,
-    createdAt: string,
-    updatedAt: string,
-    __v?: number
-}
+// interface ChapterData {
+//     content: {
+//         title: string,
+//         text: string
+//     },
+//     _id: string,
+//     id: string,
+//     index: {
+//         currentIndex: number | null,
+//         permanentIndex: number
+//     },
+//     view: boolean,
+//     createdAt: string,
+//     updatedAt: string,
+//     __v?: number
+// }
 
-interface AllChapterData {
-    allChaptersInOrder: ChapterData[]
-}
+// interface AllChapterData {
+//     allChaptersInOrder: ChapterData[]
+// }
 
-interface ChapterDataForDb {
-    id: string,
-    att: {
-        view: boolean,
-        index: {
-            permanentIndex: number,
-            currentIndex: number | null
-        }
-    }
-}
+// interface ChapterDataForDb {
+//     id: string,
+//     att: {
+//         view: boolean,
+//         index: {
+//             permanentIndex: number,
+//             currentIndex: number | null
+//         }
+//     }
+// }
 
 interface ChaptersContextData {
 }

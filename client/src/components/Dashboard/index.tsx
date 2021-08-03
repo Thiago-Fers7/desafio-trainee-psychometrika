@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios'
 import React, { useRef, useState } from 'react'
 import { useEffect, useReducer, useContext } from 'react'
-import { ChaptersContext } from '../../contexts/ChaptersContext'
 import { UserContext } from '../../contexts/UserContext'
 import { api } from '../../services/api'
 
@@ -114,21 +113,20 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
 
 
     useEffect(() => {
-        (async () => {
-            const toDbChapter: ChapterDataForDb[] = dashboardReducer.map((data: ChapterData) => {
-                return {
-                    id: data._id,
-                    att: {
-                        view: data.view,
-                        index: {
-                            permanentIndex: data.index.permanentIndex,
-                            currentIndex: data.index.currentIndex
-                        }
+        const toDbChapter: ChapterDataForDb[] = dashboardReducer.map((data: ChapterData) => {
+            return {
+                id: data._id,
+                att: {
+                    view: data.view,
+                    index: {
+                        permanentIndex: data.index.permanentIndex,
+                        currentIndex: data.index.currentIndex
                     }
                 }
-            })
+            }
+        });
 
-            setIsSending(true)
+        (async () => {
 
             await api.put('/chapters', { toDbChapter, serieIndex })
                 .then((res: AxiosResponse) => {
@@ -141,7 +139,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                 })
         })()
 
-    }, [dashboardReducer])
+    }, [dashboardReducer, serieIndex])
 
     function handleHide(idx: number): void {
         setDashboardReducer({ type: 'view', value: !dashboardReducer[idx].view, index: idx })

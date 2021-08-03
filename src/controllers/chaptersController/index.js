@@ -23,24 +23,21 @@ const chapterController = {
     },
 
     async attChapters(req, res) {
-        const { data, serieIndex } = req.body
+        const { toDbChapter, serieIndex } = req.body
 
         const myBd = series[serieIndex]
 
-
         try {
-            const result = await Promise.all(data.map(async (newValue, idx) => {
+            const result = await Promise.all(toDbChapter.map(async (newValue) => {
                 const { id, att } = newValue
                 const res = await myBd.findByIdAndUpdate(id, att)
                 return res
             }))
 
-            if (result)
-                res.status(200).json({ res: "OK" })
+            res.status(200).json({ res: "Atulizado" })
         } catch (err) {
-            res.status(404)
+            res.status(404).json({ res: "error" })
         }
-
     }
 }
 

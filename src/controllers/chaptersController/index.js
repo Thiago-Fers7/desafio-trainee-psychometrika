@@ -7,7 +7,7 @@ const chapterController = {
                 const allChaptersInOrder = await colletion.find()
 
                 allChaptersInOrder.sort(function (a, b) {
-                    return a.index.permanentIndex < b.index.permanentIndex ? -1 : a.index.permanentIndex > b.index.permanentIndex ? 1 : 0;
+                    return a.index.currentIndex < b.index.currentIndex ? -1 : a.index.currentIndex > b.index.currentIndex ? 1 : 0;
                 })
 
                 return { allChaptersInOrder }

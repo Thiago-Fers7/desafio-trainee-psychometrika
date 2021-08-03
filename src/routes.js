@@ -8,4 +8,6 @@ routes.post('/login', userController.authentication)
 
 routes.get('/chapters', chapterController.allChapters)
 
+routes.put('/chapters', chapterController.attChapters)
+
 export { routes }

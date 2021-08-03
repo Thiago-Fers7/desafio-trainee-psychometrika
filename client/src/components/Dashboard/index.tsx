@@ -47,8 +47,11 @@ interface ChildrenDataMod {
 
 function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     function reducer(state: ChapterData[], action: { type: string, value: any, index: number }) {
+        const isOrder: boolean[] = state.map((e: ChapterData) => {
+            return e.view
+        })
 
-        function reorder(isView: boolean[]) {
+        function reorder(isView: boolean[]): void {
             let count: number = 0
 
             for (let i = 0; i < state.length; i++) {
@@ -64,13 +67,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                 state[action.index].view = action.value
                 state[action.index].index.currentIndex = action.index
 
-                let updateCurrentIndex: boolean[] = []
-
-                state.forEach((e: ChapterData) => {
-                    updateCurrentIndex.push(e.view)
-                })
-
-                reorder(updateCurrentIndex)
+                reorder(isOrder)
 
                 return [
                     ...state
@@ -78,13 +75,21 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
             case 'update':
                 state = action.value
 
-                const updateIndex: boolean[] = []
-
-                state.forEach((e: ChapterData) => {
-                    updateIndex.push(true)
+                const up: boolean[] = state.map(() => {
+                    return true
                 })
 
-                const newState = reorder(updateIndex)
+                reorder(up)
+
+                return [
+                    ...state
+                ]
+            case 'reorder':
+                state = state.sort(function (a: ChapterData, b: ChapterData) {
+                    return a.index.permanentIndex < b.index.permanentIndex ? -1 : a.index.permanentIndex > b.index.permanentIndex ? 1 : 0;
+                })
+
+                reorder(isOrder)
 
                 return [
                     ...state
@@ -105,8 +110,6 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
 
     const { isAdminStudentVision } = useContext(UserContext)
 
-    const [isSending, setIsSending] = useState<boolean>(false)
-
     const inputRef = useRef<HTMLInputElement>(null)
 
     function handleDashboardTitle(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -123,19 +126,14 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
             inputRef.current?.focus()
     }, [isDisabledInput])
 
-    function handleEditTitle(event: React.FormEvent) {
-        if (aFront.length === 0) {
-            alert("Informe ao menos um caractere")
-            inputRef.current?.focus()
-            return
-        }
-
-        if (!isDisabledInput) {
-            alert("Novo título salvo!")
-        }
-
-        setIsDisabledInput(!isDisabledInput)
-    }
+    useEffect(() => {
+        dashboardReducer.forEach((e: ChapterData) => {
+            if (e.index.currentIndex !== e.index.permanentIndex) {
+                setIsReorderList(true)
+                return
+            }
+        })
+    }, [dashboardReducer])
 
     useEffect(() => {
         const toDbChapter: ChapterDataForDb[] = dashboardReducer.map((data: ChapterData) => {
@@ -159,12 +157,28 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                 })
                 .catch(err => {
                     console.error("Sending failed" + err)
-                }).finally(() => {
-                    setIsSending(false)
                 })
         })()
 
     }, [dashboardReducer, serieIndex])
+
+    function handleEditTitle(event: React.FormEvent) {
+        if (aFront.length === 0) {
+            alert("Informe ao menos um caractere")
+            inputRef.current?.focus()
+            return
+        }
+
+        if (!isDisabledInput) {
+            alert("Novo título salvo!")
+        }
+
+        setIsDisabledInput(!isDisabledInput)
+    }
+
+    function handleHide(idx: number): void {
+        setDashboardReducer({ type: 'view', value: !dashboardReducer[idx].view, index: idx })
+    }
 
     function handleOnDragEnd(action: DropResult) {
         if (!action.destination)
@@ -177,8 +191,9 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
         setDashboardReducer({ type: 'update', value: items, index: serieIndex })
     }
 
-    function handleHide(idx: number): void {
-        setDashboardReducer({ type: 'view', value: !dashboardReducer[idx].view, index: idx })
+    function handleResetOrder() {
+        setIsReorderList(false)
+        setDashboardReducer({ type: 'reorder', value: null, index: 0 })
     }
 
     function handleSubmit(event: React.FormEvent): void {
@@ -190,7 +205,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
             <div className={styles.titleSeries}>
                 <h3>{`${serieIndex + 1}ª Série`}</h3>
 
-                <span>
+                <button type="button" disabled={!isReorderList} onClick={handleResetOrder}>
                     {!isAdminStudentVision && (
                         <>
                             {isReorderList ? (
@@ -200,7 +215,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                             )}
                         </>
                     )}
-                </span>
+                </button>
             </div>
 
             <div className={styles.dashboard}>

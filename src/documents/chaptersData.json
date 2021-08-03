@@ -4,7 +4,10 @@
             "chaptersContent": [
                 {
                     "id": "chap0",
-                    "index": 0,
+                    "index": {
+                        "currentIndex": 0,
+                        "permanentIndex": 0
+                    },
                     "view": true,
                     "content": {
                         "title": "Conjutos numéricos",
@@ -13,7 +16,10 @@
                 },
                 {
                     "id": "chap1",
-                    "index": 1,
+                    "index": {
+                        "currentIndex": 1,
+                        "permanentIndex": 1
+                    },
                     "view": true,
                     "content": {
                         "title": "Conjutos",
@@ -22,7 +28,10 @@
                 },
                 {
                     "id": "chap2",
-                    "index": 2,
+                    "index": {
+                        "currentIndex": 2,
+                        "permanentIndex": 2
+                    },
                     "view": true,
                     "content": {
                         "title": "Relação a introdução às funções",
@@ -31,7 +40,10 @@
                 },
                 {
                     "id": "chap3",
-                    "index": 3,
+                    "index": {
+                        "currentIndex": 3,
+                        "permanentIndex": 3
+                    },
                     "view": true,
                     "content": {
                         "title": "Função constante e função afim",
@@ -40,7 +52,10 @@
                 },
                 {
                     "id": "chap4",
-                    "index": 4,
+                    "index": {
+                        "currentIndex": 4,
+                        "permanentIndex": 4
+                    },
                     "view": true,
                     "content": {
                         "title": "Função quadrática ou função polinomial do 2º grau",
@@ -49,7 +64,10 @@
                 },
                 {
                     "id": "chap5",
-                    "index": 5,
+                    "index": {
+                        "currentIndex": 5,
+                        "permanentIndex": 5
+                    },
                     "view": true,
                     "content": {
                         "title": "Complemento sobre a teoria das funções",
@@ -62,7 +80,10 @@
             "chaptersContent": [
                 {
                     "id": "chap00",
-                    "index": 0,
+                    "index": {
+                        "currentIndex": 0,
+                        "permanentIndex": 0
+                    },
                     "view": true,
                     "content": {
                         "title": "Revisão: conjuntos",
@@ -70,8 +91,11 @@
                     }
                 },
                 {
-                    "id": "chap1",
-                    "index": 1,
+                    "id": "chap01",
+                    "index": {
+                        "currentIndex": 1,
+                        "permanentIndex": 1
+                    },
                     "view": true,
                     "content": {
                         "title": "Princípios de análise combinatória",
@@ -80,7 +104,10 @@
                 },
                 {
                     "id": "chap02",
-                    "index": 2,
+                    "index": {
+                        "currentIndex": 2,
+                        "permanentIndex": 2
+                    },
                     "view": true,
                     "content": {
                         "title": "Formas de contagem",
@@ -89,7 +116,10 @@
                 },
                 {
                     "id": "chap03",
-                    "index": 3,
+                    "index": {
+                        "currentIndex": 3,
+                        "permanentIndex": 3
+                    },
                     "view": true,
                     "content": {
                         "title": "Binômio de Newton e triângulo de Pascal",
@@ -98,7 +128,10 @@
                 },
                 {
                     "id": "chap04",
-                    "index": 4,
+                    "index": {
+                        "currentIndex": 4,
+                        "permanentIndex": 4
+                    },
                     "view": true,
                     "content": {
                         "title": "Probabilidade",
@@ -107,7 +140,10 @@
                 },
                 {
                     "id": "chap05",
-                    "index": 5,
+                    "index": {
+                        "currentIndex": 5,
+                        "permanentIndex": 5
+                    },
                     "view": true,
                     "content": {
                         "title": "Conceitos elementares de Geometria Analítica",

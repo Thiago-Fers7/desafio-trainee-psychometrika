@@ -5,7 +5,10 @@ import { seriesAmount } from '../models/createCollections'
 
 const ChapterSchema = new Schema({
     id: String,
-    index: Number,
+    index: {
+        currentIndex: Number,
+        permanentIndex: Number
+    },
     view: Boolean,
     content: {
         title: String,

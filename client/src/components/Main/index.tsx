@@ -4,6 +4,8 @@ import { Dashboard } from "../Dashboard"
 import styles from './styles.module.scss'
 import { AxiosResponse } from 'axios'
 import { api } from '../../services/api'
+import { useContext } from "react"
+import { ChaptersContext } from "../../contexts/ChaptersContext"
 
 interface ChapterData {
     content: {
@@ -27,8 +29,9 @@ interface AllChapterData {
 }
 
 function Main() {
-    const [allChapters, setAllChapters] = useState<AllChapterData[]>({} as AllChapterData[])
     const [isChapters, setIsChapters] = useState<boolean>(false)
+
+    const { handleGlobalChapters, allChapters } = useContext(ChaptersContext)
 
     useEffect(() => {
         ; (async () => {
@@ -38,7 +41,7 @@ function Main() {
                 const data: AllChapterData[] = res.data
 
                 if (data) {
-                    setAllChapters(data)
+                    handleGlobalChapters(data)
                     setIsChapters(true)
                 } else {
                     throw new Error('Chapters not found')

@@ -1,25 +1,25 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useState } from "react";
 
-// interface ChapterData {
-//     content: {
-//         title: string,
-//         text: string
-//     },
-//     _id: string,
-//     id: string,
-//     index: {
-//         currentIndex: number | null,
-//         permanentIndex: number
-//     },
-//     view: boolean,
-//     createdAt: string,
-//     updatedAt: string,
-//     __v?: number
-// }
+interface ChapterData {
+    content: {
+        title: string,
+        text: string
+    },
+    _id: string,
+    id: string,
+    index: {
+        currentIndex: number,
+        permanentIndex: number
+    },
+    view: boolean,
+    createdAt: string,
+    updatedAt: string,
+    __v?: number
+}
 
-// interface AllChapterData {
-//     allChaptersInOrder: ChapterData[]
-// }
+interface AllChapterData {
+    allChaptersInOrder: ChapterData[]
+}
 
 // interface ChapterDataForDb {
 //     id: string,
@@ -33,6 +33,8 @@ import { createContext, ReactNode } from "react";
 // }
 
 interface ChaptersContextData {
+    handleGlobalChapters: (newValue: AllChapterData[]) => void,
+    allChapters: AllChapterData[]
 }
 
 export const ChaptersContext = createContext({} as ChaptersContextData)
@@ -40,10 +42,16 @@ export const ChaptersContext = createContext({} as ChaptersContextData)
 type ChaptersContextProviderProps = { children: ReactNode }
 
 export function ChaptersContextProvider({ children }: ChaptersContextProviderProps) {
+    const [allChapters, setAllChapters] = useState<AllChapterData[]>({} as AllChapterData[])
+
+    function handleGlobalChapters(newValue: AllChapterData[]) {
+        setAllChapters(newValue)
+    }
 
     return (
         <ChaptersContext.Provider value={{
-
+            handleGlobalChapters,
+            allChapters
         }}>
             {children}
         </ChaptersContext.Provider>

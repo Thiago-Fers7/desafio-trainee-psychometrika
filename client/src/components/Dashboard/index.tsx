@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import React, { DragEventHandler, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useEffect, useReducer, useContext } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import { api } from '../../services/api'
@@ -7,6 +7,7 @@ import { api } from '../../services/api'
 import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DraggableProvided } from 'react-beautiful-dnd'
 
 import styles from './styles.module.scss'
+import { Link } from 'react-router-dom'
 
 interface ChapterData {
     content: {
@@ -31,7 +32,7 @@ interface ChapterDataForDb {
         view: boolean,
         index: {
             permanentIndex: number,
-            currentIndex: number | null
+            currentIndex: number
         }
     }
 }
@@ -48,24 +49,19 @@ interface ChildrenDataMod {
 function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     function reducer(state: ChapterData[], action: { type: string, value: any, index: number }) {
         const isOrder: boolean[] = state.map((e: ChapterData) => {
-            return e.view
+            return true
         })
 
         function reorder(isView: boolean[]): void {
-            let count: number = 0
-
             for (let i = 0; i < state.length; i++) {
-                if (isView[i]) {
-                    state[i].index.currentIndex = count
-                    count++
-                }
+                state[i].index.currentIndex = i
             }
         }
 
         switch (action.type) {
             case 'view':
                 state[action.index].view = action.value
-                state[action.index].index.currentIndex = action.index
+                // state[action.index].index.currentIndex = action.index
 
                 reorder(isOrder)
 
@@ -75,11 +71,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
             case 'update':
                 state = action.value
 
-                const up: boolean[] = state.map(() => {
-                    return true
-                })
-
-                reorder(up)
+                reorder(isOrder)
 
                 return [
                     ...state
@@ -94,6 +86,10 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                 return [
                     ...state
                 ]
+                case 'studentContent':
+                    return [
+                        ...action.value
+                    ]
             default:
                 return [
                     ...state
@@ -105,20 +101,27 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
 
     const [aFront, setAFront] = useState<string>('Frente A')
 
-    const [isReorderList, setIsReorderList] = useState<boolean>(false)
+    const [isReorderList, setIsReorderList] = useState<boolean>(true)
     const [isDisabledInput, setIsDisabledInput] = useState<boolean>(true)
+    const [countIndexView, setCountIndexView] = useState<(string | number)[]>([] as (string | number)[])
 
-    const { isAdminStudentVision } = useContext(UserContext)
+    const { isAdminStudentVision, isAdmin } = useContext(UserContext)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
-    function handleDashboardTitle(event: React.ChangeEvent<HTMLInputElement>): void {
-        const value: string = event.target.value
+    useEffect(() => {
+        if (!isAdmin || isAdminStudentVision) {
+            const studentContent = dashboardReducer.filter((e: ChapterData) => e.view)
 
-        if (value.length < 27) {
-            setAFront(value)
+            console.log(studentContent)
+
+            setDashboardReducer({ type: 'studentContent', value: studentContent, index: 0 })
         }
-    }
+
+        if (isAdminStudentVision) {
+            console.log('oi')
+        }
+    }, [])
 
     // Mudar Foco para Input
     useEffect(() => {
@@ -127,12 +130,25 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     }, [isDisabledInput])
 
     useEffect(() => {
-        dashboardReducer.forEach((e: ChapterData) => {
-            if (e.index.currentIndex !== e.index.permanentIndex) {
-                setIsReorderList(true)
-                return
+        // dashboardReducer.forEach((e: ChapterData) => {
+        //     if (e.index.currentIndex !== e.index.permanentIndex) {
+        //         setIsReorderList(true)
+        //         return
+        //     }
+        // })
+
+        let arrayCount = []
+        let count2: number | string = 1 || ''
+
+        for (let i = 0; i < dashboardReducer.length; i++) {
+            if (dashboardReducer[i].view) {
+                arrayCount.push(count2)
+                count2++
+            } else {
+                arrayCount.push('')
             }
-        })
+        }
+        setCountIndexView(arrayCount)
     }, [dashboardReducer])
 
     useEffect(() => {
@@ -184,7 +200,8 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
         if (!action.destination)
             return
 
-        const items = Array.from(dashboardReducer)
+        const items: ChapterData[] = Array.from(dashboardReducer)
+
         const [reorderedItem] = items.splice(action.source.index, 1)
         items.splice(action.destination.index, 0, reorderedItem)
 
@@ -192,8 +209,15 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     }
 
     function handleResetOrder() {
-        setIsReorderList(false)
         setDashboardReducer({ type: 'reorder', value: null, index: 0 })
+    }
+
+    function handleDashboardTitle(event: React.ChangeEvent<HTMLInputElement>): void {
+        const value: string = event.target.value
+
+        if (value.length < 27) {
+            setAFront(value)
+        }
     }
 
     function handleSubmit(event: React.FormEvent): void {
@@ -250,7 +274,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                             <div className={styles.dropContainer} {...provided.droppableProps} ref={provided.innerRef}>
                                 {dashboardReducer.map((chapter: ChapterData, index: number) => {
                                     return (
-                                        <Draggable key={chapter.id} draggableId={chapter.id} index={index}>
+                                        <Draggable isDragDisabled={isAdminStudentVision} key={chapter.id} draggableId={chapter.id} index={index}>
                                             {(provided: DraggableProvided) => (
                                                 <div
                                                     className={`${styles.chapterContainer} ${!chapter.view ? styles.scratched : ''}`}
@@ -262,7 +286,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                                                         {!isAdminStudentVision && <img src="/images/move-icon.svg" alt="Mover" />}
                                                     </span>
                                                     <span className={styles.index}>
-                                                        <span>{chapter.view ? chapter.index.currentIndex + 1 : ''}</span>
+                                                        <span>{countIndexView[index]}</span>
                                                     </span>
                                                     <span className={styles.titleChapter}>{chapter.content.title}</span>
                                                     <div className={styles.icons}>
@@ -275,7 +299,11 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                                                                 )}
                                                             </span>
                                                         )}
-                                                        <span><img src="/images/open-chapter.svg" alt="Abrir" /></span>
+                                                        <span>
+                                                            <Link to={`/content/${serieIndex}/${index}`}>
+                                                                <img src="/images/open-chapter.svg" alt="Abrir" />
+                                                            </Link>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             )}
@@ -284,7 +312,8 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                                 })}
                                 {provided.placeholder}
                             </div>
-                        )}
+                        )
+                        }
                     </Droppable>
                 </DragDropContext>
             </div>

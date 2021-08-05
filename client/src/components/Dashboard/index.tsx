@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios'
 import React, { EffectCallback, useRef, useState } from 'react'
 import { useEffect, useReducer, useContext } from 'react'
 import { UserContext } from '../../contexts/UserContext'
@@ -11,6 +10,7 @@ import { Widget } from '../Widget'
 import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DraggableProvided } from 'react-beautiful-dnd'
 
 import styles from './styles.module.scss'
+import { GlobalContext } from '../../contexts/GlobalContext'
 
 
 interface ChapterData {
@@ -105,28 +105,16 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const {
-        isAdminStudentVision,
-        isAdmin,
-        isWarning,
-        messageWarning,
-        handleWarning
-    } = useContext(UserContext)
+    const { isAdminStudentVision, isAdmin } = useContext(UserContext)
+    const { handleWarning } = useContext(GlobalContext)
 
     const inputRef = useRef<HTMLInputElement>(null)
-
-    let timer: ReturnType<typeof setTimeout>
 
     useEffect((): ReturnType<EffectCallback> => {
         if (!isAdmin || isAdminStudentVision) {
             const studentContent = dashboardReducer.filter((e: ChapterData) => e.view)
 
             setDashboardReducer({ type: 'studentContent', value: studentContent, index: 0 })
-        }
-
-        return () => {
-            handleWarning(false, '')
-            clearTimeout(timer)
         }
     }, [])
 
@@ -178,9 +166,6 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                 .then()
                 .catch(err => {
                     handleWarning(true, "Sending failed" + err)
-                    timer = setTimeout(() => {
-                        handleWarning(false, '')
-                    }, 5000)
                 }).finally(() => {
                     setIsLoading(false)
                 })
@@ -192,20 +177,12 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
         if (aFront.length === 0) {
             handleWarning(true, "Informe ao menos um caractere")
 
-            timer = setTimeout(() => {
-                handleWarning(false, '')
-            }, 5000)
-
             inputRef.current?.focus()
             return
         }
 
         if (!isDisabledInput) {
             handleWarning(true, "Novo título Salvo!")
-
-            timer = setTimeout(() => {
-                handleWarning(false, '')
-            }, 5000)
         }
 
         setIsDisabledInput(!isDisabledInput)

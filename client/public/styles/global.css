@@ -26,6 +26,11 @@ html {
     font-size: 62.5%
 }
 
+body, #root {
+    height: calc(100vh - 7.2rem);
+    background: var(--gray-light);
+}
+
 button, textarea, input, body {
     font-family: Inter, sans-serif;
     letter-spacing: 0.01rem;

@@ -3,7 +3,6 @@ import { useContext } from "react"
 import { Link, useParams } from "react-router-dom"
 import { Header } from "../../components/Header"
 import { ChaptersContext } from "../../contexts/ChaptersContext"
-import { UserContext } from "../../contexts/UserContext"
 
 import styles from './styles.module.scss'
 
@@ -29,7 +28,6 @@ interface AllChapterData {
 
 function ChapterContent() {
     const { allChapters } = useContext(ChaptersContext)
-    const { isAdmin, isAdminStudentVision } = useContext(UserContext)
 
     const { authorization, chapterId } = useParams<{ chapterId: string, authorization: string }>()
 

@@ -7,10 +7,11 @@
     background: #ffffff;
     border-bottom-right-radius: 0.8rem;
     width: 100%;
+    opacity: 0;
 
     box-shadow: 0 0 2rem #000000;
 
-    animation: warning 5s forwards;
+    animation: warning 4s forwards;
 
     p {
         text-align: center;

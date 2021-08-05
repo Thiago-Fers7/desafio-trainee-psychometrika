@@ -6,9 +6,8 @@ interface UserContextData {
     isAdmin: boolean,
     handleStudentVision: (isVisionAdm: boolean) => void,
     isAdminStudentVision: boolean,
-    handleWarning: (warning: boolean, message: string) => void,
-    isWarning: boolean,
-    messageWarning: string
+    currentTeam: number,
+    handleTeam: (team: number) => void
 }
 
 export const UserContext = createContext({} as UserContextData)
@@ -19,13 +18,10 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
     const [authenticationData, setAuthenticationData] = useState<string>('')
     const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const [isAdminStudentVision, setIsAdminStudentVision] = useState<boolean>(false)
+    const [currentTeam, setCurrentTeam] = useState<number>(0)
 
-    const [isWarning, setIsWarning] = useState<boolean>(false)
-    const [messageWarning, setMessageWarning] = useState<string>('')
-
-    function handleWarning(warning: boolean = false, message: string) {
-        setIsWarning(warning)
-        setMessageWarning(message)
+    function handleTeam(team: number) {
+        setCurrentTeam(team)
     }
 
     function handleAuthentication(userData: string) {
@@ -48,9 +44,8 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
             isAdmin,
             handleStudentVision,
             isAdminStudentVision,
-            handleWarning,
-            isWarning,
-            messageWarning
+            currentTeam,
+            handleTeam
         }}>
             {children}
         </UserContext.Provider>

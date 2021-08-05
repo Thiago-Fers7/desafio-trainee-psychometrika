@@ -6,6 +6,7 @@ import { AxiosResponse } from 'axios'
 import { api } from '../../services/api'
 import { useContext } from "react"
 import { ChaptersContext } from "../../contexts/ChaptersContext"
+import { UserContext } from "../../contexts/UserContext"
 
 interface ChapterData {
     content: {
@@ -32,6 +33,7 @@ function Main() {
     const [isChapters, setIsChapters] = useState<boolean>(false)
 
     const { handleGlobalChapters, allChapters } = useContext(ChaptersContext)
+    const { currentTeam, isAdmin } = useContext(UserContext)
 
     useEffect(() => {
         ; (async () => {
@@ -47,7 +49,7 @@ function Main() {
                     throw new Error('Chapters not found')
                 }
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         })()
     }, [])
@@ -60,7 +62,17 @@ function Main() {
                         <h2>Nome da Escola</h2>
                     </header>
                     <article className={styles.dashboardContainer}>
-                        {allChapters.map((chapter: AllChapterData, index: number) => <Dashboard key={index} chapter={chapter} serieIndex={index} />)}
+                        {allChapters.map((chapter: AllChapterData, index: number) => {
+                            return (
+                                <>
+                                    {(currentTeam - 1) === index ? (
+                                        <Dashboard key={index} chapter={chapter} serieIndex={index} />
+                                    ) : isAdmin && (
+                                        <Dashboard key={index} chapter={chapter} serieIndex={index} />
+                                    )}
+                                </>
+                            )
+                        })}
                     </article>
                 </main>
             )}

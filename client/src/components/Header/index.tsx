@@ -3,22 +3,15 @@ import { useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { UserContext } from '../../contexts/UserContext'
 import styles from './styles.module.scss'
-import { Warning } from '../Warning'
+import { GlobalContext } from '../../contexts/GlobalContext'
 
 function Header() {
     const [isMenu, setIsMenu] = useState<boolean>(false)
     const [isAdminCheck, setIsAdminCheck] = useState<boolean>(false)
     const [isStudentCheck, setIsStudentCheck] = useState<boolean>(false)
 
-    let timer: ReturnType<typeof setTimeout>
-
-    const {
-        authenticationData,
-        handleStudentVision,
-        handleWarning,
-        isWarning,
-        messageWarning
-    } = useContext(UserContext)
+    const { authenticationData, handleStudentVision } = useContext(UserContext)
+    const { handleWarning } = useContext(GlobalContext)
 
     const history = useHistory()
     const location = useLocation()
@@ -41,9 +34,8 @@ function Header() {
 
         return () => {
             handleWarning(false, '')
-            clearTimeout(timer)
         }
-    }, [])
+    }, [location.pathname])
 
     function handleCheck(event: React.ChangeEvent<HTMLInputElement>): void {
         const valueInput: string = event.target.value
@@ -61,12 +53,7 @@ function Header() {
                 setIsStudentCheck(true)
                 break
             default:
-                handleWarning(true, "Faça login para continuar usando normalmente")
-
-                timer = setTimeout(() => {
-                    handleWarning(false, '')
-                }, 5000)
-
+                handleWarning(true, "Faça login para continuar usando normalmente!")
                 break
         }
     }
@@ -94,64 +81,61 @@ function Header() {
     }
 
     return (
-        <>
-            {isWarning && <Warning message={messageWarning} />}
-            <header className={styles.headerContainer}>
-                <div className={styles.header}>
-                    <div className={styles.logoContainer}>
-                        <img src="/images/logo.svg" alt="Logo Psychometrika" />
-                        <p className={styles.descript}>Desafio Trainee</p>
+        <header className={styles.headerContainer}>
+            <div className={styles.header}>
+                <div className={styles.logoContainer}>
+                    <img src="/images/logo.svg" alt="Logo Psychometrika" />
+                    <p className={styles.descript}>Desafio Trainee</p>
+                </div>
+                <div className={`${styles.menuContainer} ${isMenu ? styles.activeMenu : ""}`}>
+                    <div className={styles.iconMenu} onClick={menuToggle}>
+                        <span>A</span>
+                        <img src="/images/down.svg" alt="Exibir menu" />
                     </div>
-                    <div className={`${styles.menuContainer} ${isMenu ? styles.activeMenu : ""}`}>
-                        <div className={styles.iconMenu} onClick={menuToggle}>
-                            <span>A</span>
-                            <img src="/images/down.svg" alt="Exibir menu" />
-                        </div>
-                        {/* Menu MODAL */}
-                        <nav className={styles.menu}>
-                            <form onSubmit={handleSubmit}>
-                                <fieldset>
-                                    <legend>Você está atualmente com</legend>
-                                    {authenticationData === admin && (
-                                        <label>
-                                            <input
-                                                type="radio"
-                                                name="states"
-                                                id="admin"
-                                                value={admin}
-                                                checked={isAdminCheck}
-                                                onChange={handleCheck}
-                                            />
-                                            <span>Acesso do Admin</span>
-                                        </label>
-                                    )}
+                    {/* Menu MODAL */}
+                    <nav className={styles.menu}>
+                        <form onSubmit={handleSubmit}>
+                            <fieldset>
+                                <legend>Você está atualmente com</legend>
+                                {authenticationData === admin && (
                                     <label>
                                         <input
                                             type="radio"
                                             name="states"
-                                            id="student"
-                                            value={student}
-                                            checked={isStudentCheck}
+                                            id="admin"
+                                            value={admin}
+                                            checked={isAdminCheck}
                                             onChange={handleCheck}
                                         />
-                                        <span>Acesso do Aluno</span>
+                                        <span>Acesso do Admin</span>
                                     </label>
-                                    {authenticationData === admin && (
-                                        <button type="submit">Alterar</button>
-                                    )}
-                                </fieldset>
-                            </form>
-                            <button
-                                type="button"
-                                onClick={handleLogout}
-                            >
-                                Sair
-                            </button>
-                        </nav>
-                    </div>
+                                )}
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="states"
+                                        id="student"
+                                        value={student}
+                                        checked={isStudentCheck}
+                                        onChange={handleCheck}
+                                    />
+                                    <span>Acesso do Aluno</span>
+                                </label>
+                                {authenticationData === admin && (
+                                    <button type="submit">Alterar</button>
+                                )}
+                            </fieldset>
+                        </form>
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                        >
+                            Sair
+                        </button>
+                    </nav>
                 </div>
-            </header>
-        </>
+            </div>
+        </header>
     )
 }
 

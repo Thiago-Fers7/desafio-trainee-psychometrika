@@ -1,6 +1,7 @@
 .loadingAnimation {
     position: absolute;
     top: 1rem;
+    z-index: 999;
     right: 1rem;
 
     border: 0.5rem solid #f3f3f3;

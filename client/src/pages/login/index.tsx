@@ -1,17 +1,18 @@
-import React, { useContext, useEffect } from 'react'
+import React, { EffectCallback, useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api'
-import styles from './styles.module.scss'
-
+import { AxiosResponse } from 'axios';
+import { UserContext } from '../../contexts/UserContext';
 import { Loading } from '../../components/Loading'
 
 // Icons
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useStyles } from './iconsStyle'
-import { AxiosResponse } from 'axios';
-import { UserContext } from '../../contexts/UserContext';
+
+import styles from './styles.module.scss'
+import { Warning } from '../../components/Warning';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>
 
@@ -33,12 +34,25 @@ function Login() {
     const [password, setPassword] = useState<string>('')
     const [isPassword, isSetPassword] = useState<boolean>(true)
 
-    const { handleAuthentication, handleStudentVision } = useContext(UserContext)
+    let timer: ReturnType<typeof setTimeout>
+
+    const {
+        handleAuthentication,
+        handleStudentVision,
+        isWarning,
+        messageWarning,
+        handleWarning
+    } = useContext(UserContext)
 
     const history = useHistory()
 
-    useEffect(() => {
+    useEffect((): ReturnType<EffectCallback> => {
         document.title = "Desafio Treinee | Login"
+
+        return () => {
+            handleWarning(false, '')
+            clearTimeout(timer)
+        }
     }, [])
 
     function toggleViewPass() {
@@ -102,17 +116,25 @@ function Login() {
                         }
                     })
                     .catch(err => {
-                        alert(err)
+                        handleWarning(true, err)
+
+                        timer = setTimeout(() => {
+                            handleWarning(false, '')
+                        }, 5000)
                     })
                     .finally(() => {
                         setIsLoading(false)
                     })
             } else {
-                throw new Error('Preencha todos os campos antes de prosseguir')
+                throw 'Preencha todos os campos antes de prosseguir'
             }
         } catch (err) {
             if (typeof err === 'string') {
-                alert(err)
+                handleWarning(true, err)
+                
+                timer = setTimeout(() => {
+                    handleWarning(false, '')
+                }, 5000)
             }
         }
     }
@@ -123,70 +145,67 @@ function Login() {
     }
 
     return (
-        <div className={styles.container} style={backgroundStyle}>
-            <section>
-                <h2 className="sr-only">
-                    Psychometrika
-                </h2>
-
-                <img src="/images/logo.svg" alt="Logo Psychometrika" />
-
-                <p className={styles.descript}>Desafio Trainee</p>
-
-                <form onSubmit={handleSubmit} >
-                    <fieldset>
-                        <legend className="sr-only">
-                            Informe os dados de login
-                        </legend>
-
-                        <div className={styles.inputFields}>
-                            <label>
-                                <span>Email</span>
-                                <input
-                                    type="text"
-                                    id="email"
-                                    name="email"
-                                    placeholder="Seu email institucional"
-                                    autoComplete="off"
-                                    onChange={handleEmail}
-                                    value={email}
-                                />
-                                <span className={styles.inputError}>{(isEmail && email !== '') && "Email inválido!"}</span>
-                            </label>
-                            <label>
-                                <span>Senha</span>
-                                <input
-                                    type={viewPass ? "text" : "password"}
-                                    id="password"
-                                    name="password"
-                                    placeholder="Mínimo de 8 caracteres"
-                                    autoComplete="off"
-                                    onChange={handlePassword}
-                                    value={password}
-                                />
-                                {viewPass ? (
-                                    <VisibilityIcon onClick={toggleViewPass} className={viewStyles.root} />
-                                ) : (
-                                    <VisibilityOffIcon onClick={toggleViewPass} className={viewStyles.root} />
-                                )}
-                                <span className={styles.inputError}>{(isPassword && password !== '') && "Senha inválida!"}</span>
-                            </label>
-                        </div>
-                        <button
-                            type="submit"
-                        >
-                            Entrar
-                        </button>
-                    </fieldset>
-                </form>
-            </section>
-
-            {/* Loading */}
-            {isLoading && (
-                <Loading />
-            )}
-
-        </div>
+        <>
+            {isWarning && <Warning message={messageWarning} />}
+            <div className={styles.container} style={backgroundStyle}>
+                <section>
+                    <h2 className="sr-only">
+                        Psychometrika
+                    </h2>
+                    <img src="/images/logo.svg" alt="Logo Psychometrika" />
+                    <p className={styles.descript}>Desafio Trainee</p>
+                    <form onSubmit={handleSubmit} >
+                        <fieldset>
+                            <legend className="sr-only">
+                                Informe os dados de login
+                            </legend>
+                            <div className={styles.inputFields}>
+                                <label>
+                                    <span>Email</span>
+                                    <input
+                                        type="text"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Seu email institucional"
+                                        autoComplete="off"
+                                        onChange={handleEmail}
+                                        value={email}
+                                    />
+                                    <span className={styles.inputError}>{(isEmail && email !== '') && "Email inválido!"}</span>
+                                </label>
+                                <label>
+                                    <span>Senha</span>
+                                    <input
+                                        type={viewPass ? "text" : "password"}
+                                        id="password"
+                                        name="password"
+                                        placeholder="Mínimo de 8 caracteres"
+                                        autoComplete="off"
+                                        onChange={handlePassword}
+                                        value={password}
+                                    />
+                                    {viewPass ? (
+                                        <VisibilityIcon onClick={toggleViewPass} className={viewStyles.root} />
+                                    ) : (
+                                        <VisibilityOffIcon onClick={toggleViewPass} className={viewStyles.root} />
+                                    )}
+                                    <span className={styles.inputError}>{(isPassword && password !== '') && "Senha inválida!"}</span>
+                                </label>
+                            </div>
+                            <button
+                                type="submit"
+                            >
+                                Entrar
+                            </button>
+                        </fieldset>
+                    </form>
+                </section>
+                {/* Loading */}
+                {isLoading && (
+                    <Loading />
+                )}
+            </div>
+        </>
     )
 }
 

@@ -1,15 +1,17 @@
 import { AxiosResponse } from 'axios'
-import React, { useRef, useState } from 'react'
+import React, { EffectCallback, useRef, useState } from 'react'
 import { useEffect, useReducer, useContext } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import { api } from '../../services/api'
+import { Link } from 'react-router-dom'
 
+import { Loading } from '../Loading'
 import { Widget } from '../Widget'
 
 import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DraggableProvided } from 'react-beautiful-dnd'
 
 import styles from './styles.module.scss'
-import { Link, useLocation } from 'react-router-dom'
+
 
 interface ChapterData {
     content: {
@@ -50,11 +52,7 @@ interface ChildrenDataMod {
 
 function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     function reducer(state: ChapterData[], action: { type: string, value: any, index: number }) {
-        const isOrder: boolean[] = state.map((e: ChapterData) => {
-            return true
-        })
-
-        function reorder(isView: boolean[]): void {
+        function reorder(): void {
             for (let i = 0; i < state.length; i++) {
                 state[i].index.currentIndex = i
             }
@@ -63,9 +61,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
         switch (action.type) {
             case 'view':
                 state[action.index].view = action.value
-                // state[action.index].index.currentIndex = action.index
-
-                reorder(isOrder)
+                reorder()
 
                 return [
                     ...state
@@ -73,7 +69,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
             case 'update':
                 state = action.value
 
-                reorder(isOrder)
+                reorder()
 
                 return [
                     ...state
@@ -83,7 +79,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                     return a.index.permanentIndex < b.index.permanentIndex ? -1 : a.index.permanentIndex > b.index.permanentIndex ? 1 : 0;
                 })
 
-                reorder(isOrder)
+                reorder()
 
                 return [
                     ...state
@@ -107,23 +103,30 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     const [isDisabledInput, setIsDisabledInput] = useState<boolean>(true)
     const [countIndexView, setCountIndexView] = useState<(string | number)[]>([] as (string | number)[])
 
-    const { isAdminStudentVision, isAdmin } = useContext(UserContext)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const locale = useLocation()
+    const {
+        isAdminStudentVision,
+        isAdmin,
+        isWarning,
+        messageWarning,
+        handleWarning
+    } = useContext(UserContext)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
-    useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>
+
+    useEffect((): ReturnType<EffectCallback> => {
         if (!isAdmin || isAdminStudentVision) {
             const studentContent = dashboardReducer.filter((e: ChapterData) => e.view)
-
-            console.log(studentContent)
 
             setDashboardReducer({ type: 'studentContent', value: studentContent, index: 0 })
         }
 
-        if (isAdminStudentVision) {
-            console.log('oi')
+        return () => {
+            handleWarning(false, '')
+            clearTimeout(timer)
         }
     }, [])
 
@@ -170,26 +173,39 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
         });
 
         (async () => {
+            setIsLoading(true)
             await api.put('/chapters', { toDbChapter, serieIndex })
-                .then((res: AxiosResponse) => {
-                    console.log(res.data.res)
-                })
+                .then()
                 .catch(err => {
-                    console.error("Sending failed" + err)
+                    handleWarning(true, "Sending failed" + err)
+                    timer = setTimeout(() => {
+                        handleWarning(false, '')
+                    }, 5000)
+                }).finally(() => {
+                    setIsLoading(false)
                 })
         })()
 
     }, [dashboardReducer, serieIndex])
 
-    function handleEditTitle(event: React.FormEvent) {
+    function handleEditTitle() {
         if (aFront.length === 0) {
-            alert("Informe ao menos um caractere")
+            handleWarning(true, "Informe ao menos um caractere")
+
+            timer = setTimeout(() => {
+                handleWarning(false, '')
+            }, 5000)
+
             inputRef.current?.focus()
             return
         }
 
         if (!isDisabledInput) {
-            alert("Novo título salvo!")
+            handleWarning(true, "Novo título Salvo!")
+
+            timer = setTimeout(() => {
+                handleWarning(false, '')
+            }, 5000)
         }
 
         setIsDisabledInput(!isDisabledInput)
@@ -230,6 +246,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
 
     return (
         <section className={styles.series}>
+            {isLoading && <Loading />}
             <div className={styles.titleSeries}>
                 <h3>{`${serieIndex + 1}ª Série`}</h3>
 
@@ -287,7 +304,6 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                                                 <div
                                                     className={`${styles.chapterContainer} ${!chapter.view ? styles.scratched : ''}`}
                                                     {...provided.draggableProps}
-
                                                     ref={provided.innerRef}
                                                 >
                                                     <span {...provided.dragHandleProps}>
@@ -307,7 +323,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                                                                 )}
 
                                                                 <div className={styles.widget} >
-                                                                    <Widget title="Ocultar capítulo    " />
+                                                                    <Widget title="Ocultar capítulo" />
                                                                 </div>
                                                             </div>
                                                         )}
@@ -326,8 +342,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                                 })}
                                 {provided.placeholder}
                             </div>
-                        )
-                        }
+                        )}
                     </Droppable>
                 </DragDropContext>
             </div>

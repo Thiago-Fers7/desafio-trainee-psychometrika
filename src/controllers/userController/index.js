@@ -19,7 +19,7 @@ const userController = {
                 if (student && bcrypt.compareSync(password, student.password))
                     res.status(200).json({ authentication: "student", pass: true })
                 else
-                    throw "Login ou senha inválidos!"
+                    throw "Email ou senha inválidos!"
             }
         } catch (err) {
             res.status(200).json({ error: err, message: "Usuário não encontrado!" })

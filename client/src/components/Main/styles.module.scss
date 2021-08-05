@@ -1,6 +1,7 @@
 .container {
     margin-top: 7.2rem;
     background: var(--gray-light);
+    height: calc(100vh - 7.2rem);
 
     header {
         height: 7.2rem;
@@ -19,6 +20,7 @@
 
     .dashboardContainer {
         display: flex;
+        justify-content: center;  
         flex-wrap: wrap;
         gap: 4rem;
         max-width: 144rem;

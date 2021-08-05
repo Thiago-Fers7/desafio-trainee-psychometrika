@@ -4,10 +4,12 @@ import { useEffect, useReducer, useContext } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import { api } from '../../services/api'
 
+import { Widget } from '../Widget'
+
 import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DraggableProvided } from 'react-beautiful-dnd'
 
 import styles from './styles.module.scss'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 interface ChapterData {
     content: {
@@ -86,10 +88,10 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                 return [
                     ...state
                 ]
-                case 'studentContent':
-                    return [
-                        ...action.value
-                    ]
+            case 'studentContent':
+                return [
+                    ...action.value
+                ]
             default:
                 return [
                     ...state
@@ -101,11 +103,13 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
 
     const [aFront, setAFront] = useState<string>('Frente A')
 
-    const [isReorderList, setIsReorderList] = useState<boolean>(true)
+    const [isReorderList, setIsReorderList] = useState<boolean>(false)
     const [isDisabledInput, setIsDisabledInput] = useState<boolean>(true)
     const [countIndexView, setCountIndexView] = useState<(string | number)[]>([] as (string | number)[])
 
     const { isAdminStudentVision, isAdmin } = useContext(UserContext)
+
+    const locale = useLocation()
 
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -130,12 +134,12 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
     }, [isDisabledInput])
 
     useEffect(() => {
-        // dashboardReducer.forEach((e: ChapterData) => {
-        //     if (e.index.currentIndex !== e.index.permanentIndex) {
-        //         setIsReorderList(true)
-        //         return
-        //     }
-        // })
+        dashboardReducer.forEach((e: ChapterData) => {
+            if (e.index.currentIndex !== e.index.permanentIndex) {
+                setIsReorderList(true)
+                return
+            }
+        })
 
         let arrayCount = []
         let count2: number | string = 1 || ''
@@ -166,7 +170,6 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
         });
 
         (async () => {
-
             await api.put('/chapters', { toDbChapter, serieIndex })
                 .then((res: AxiosResponse) => {
                     console.log(res.data.res)
@@ -210,6 +213,7 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
 
     function handleResetOrder() {
         setDashboardReducer({ type: 'reorder', value: null, index: 0 })
+        setIsReorderList(false)
     }
 
     function handleDashboardTitle(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -239,6 +243,10 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                             )}
                         </>
                     )}
+
+                    <div className={styles.widget} >
+                        <Widget title="Restaurar Padrões" />
+                    </div>
                 </button>
             </div>
 
@@ -279,31 +287,37 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                                                 <div
                                                     className={`${styles.chapterContainer} ${!chapter.view ? styles.scratched : ''}`}
                                                     {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
+
                                                     ref={provided.innerRef}
                                                 >
-                                                    <span>
+                                                    <span {...provided.dragHandleProps}>
                                                         {!isAdminStudentVision && <img src="/images/move-icon.svg" alt="Mover" />}
                                                     </span>
                                                     <span className={styles.index}>
                                                         <span>{countIndexView[index]}</span>
                                                     </span>
-                                                    <span className={styles.titleChapter}>{chapter.content.title}</span>
+                                                    <span className={styles.titleChapter} title={chapter.content.title}>{chapter.content.title}</span>
                                                     <div className={styles.icons}>
                                                         {!isAdminStudentVision && (
-                                                            <span onClick={() => handleHide(index)}>
+                                                            <div onClick={() => handleHide(index)}>
                                                                 {!chapter.view ? (
                                                                     <img src="/images/view-disabled.svg" alt="Desabilitado Para Visualizar" />
                                                                 ) : (
                                                                     <img src="/images/view-enable.svg" alt="Habilitado Para Visualizar" />
                                                                 )}
-                                                            </span>
+
+                                                                <div className={styles.widget} >
+                                                                    <Widget title="Ocultar capítulo    " />
+                                                                </div>
+                                                            </div>
                                                         )}
-                                                        <span>
-                                                            <Link to={`/content/${serieIndex}/${index}`}>
-                                                                <img src="/images/open-chapter.svg" alt="Abrir" />
-                                                            </Link>
-                                                        </span>
+
+                                                        <Link to={`/chapters/${!isAdminStudentVision ? 'admin' : 'student'}/${chapter.id}`}>
+                                                            <img src="/images/open-chapter.svg" alt="Abrir" />
+                                                            <div className={styles.widget} >
+                                                                <Widget title="Visualizar capítulo" />
+                                                            </div>
+                                                        </Link>
                                                     </div>
                                                 </div>
                                             )}

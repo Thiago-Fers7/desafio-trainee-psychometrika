@@ -10,9 +10,6 @@ import { ChapterContent } from './pages/chapterContent'
 function Routes() {
     return (
         <Switch>
-            <Route path="/content/:series/:index">
-                <ChapterContent />
-            </Route>
 
             <Route path="/dashboard/student">
                 <StudentDashboard />
@@ -20,6 +17,10 @@ function Routes() {
 
             <Route path="/dashboard/admin">
                 <AdminDashboard />
+            </Route>
+
+            <Route path="/chapters/:authorization/:chapterId">
+                <ChapterContent />
             </Route>
 
             <Route path="/login">

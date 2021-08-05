@@ -1,0 +1,29 @@
+.widget {
+    position: absolute;
+    white-space: nowrap;
+    padding: 0.7rem 1.2rem;
+    border-radius: 0.8rem;
+    background: var(--gray-75);
+    left: -50%;
+    bottom: -107%;
+    transform: translateX(-27%);
+    
+    &::before {
+        content: "";
+        width: 1.2rem;
+        height: 1.2rem;
+        position: absolute;
+        top: 1px;
+        left: 50%;
+        border-radius: 0.3rem;
+        background: var(--gray-75);
+        transform: rotate(45deg) translateX(-50%);
+    }
+
+    p {
+        color: #fff;
+        font-weight: 400;
+        font-size: 1.4rem;
+        line-height: 1.6rem;
+    }
+}

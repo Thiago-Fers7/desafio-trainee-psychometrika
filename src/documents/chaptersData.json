@@ -11,7 +11,7 @@
                     "view": true,
                     "content": {
                         "title": "Conjutos numéricos",
-                        "text": "Os Conjutos numéricos..."
+                        "text": "<p>Conjunto é o agrupamento de elementos que partilham de mesmas características. Quando esses elementos são números, essa união passa a ser conhecida como conjunto numérico. Dentro da matemática, pode-se agrupar os números de diversas formas, gerando assim inúmeros conjuntos numéricos.</p><p>Porém, alguns desses conjuntos são mais notórios por conta da frequência que aparecem nas soluções e demonstrações matemáticas. São eles: naturais, inteiros, racionais, irracionais e reais.</p><p>O Conjunto dos Números Naturais, representado pela letra N, foi o primeiro conjunto numérico que surgiu, por conta da necessidade de se realizar contagens. Seus elementos são os números inteiros e positivos. O conjunto dos números naturais possui os seguintes elementos:</p><p>N = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, …}</p><p>As chaves ({x}) são utilizadas na representação para dar ideia de conjunto. Os pontos de reticência dão a ideia de infinidade, já que os conjuntos numéricos são infinitos.O Conjunto dos Números Naturais inicia-se em zero e é infinito.</p>"
                     }
                 },
                 {
@@ -23,7 +23,7 @@
                     "view": true,
                     "content": {
                         "title": "Conjutos",
-                        "text": "Os Conjutos..."
+                        "text": "<p>A compreensão de conjuntos é a principal base para o estudo da álgebra e de conceitos de grande importância na Matemática, como funções e inequações. A notação que usamos para conjuntos é sempre uma letra maiúscula do nosso alfabeto (por exemplo, conjunto A ou conjunto B).</p><p>Em se tratando da representação dos conjuntos, ela pode ser feita pelo diagrama de Venn, pela simples descrição das características dos seus elementos, pela enumeração dos elementos ou pela descrição das suas propriedades. Ao trabalhar com problemas que envolvem conjuntos, existem situações que exigem a realização de operações entre os conjuntos, sendo elas a união, a intersecção e a diferença. Vamos estudar tudo isso detalhadamente?</p><p>Para representação de um conjunto, utilizamos sempre uma letra maiúscula do alfabeto, e os elementos estão sempre entre chaves e são separados por vírgula. Para representar o conjunto dos números pares maiores que 1 e menores que 20, por exemplo, usamos a seguinte notação: P ={2,4,6,8,10,12,14,16,18}.</p><p>Dado um elemento qualquer, podemos dizer que o elemento pertence ao conjunto ou não pertente a esse conjunto. Para representar essa relação de pertinência de forma mais rápida, utilizamos os símbolos  ​​ (lê-se pertence) e ∉ (lê-se não pertente). Por exemplo, seja P o conjunto dos números pares, podemos dizer que o 7 ∉ P e que 12  P.</p>"
                     }
                 },
                 {
@@ -35,7 +35,7 @@
                     "view": true,
                     "content": {
                         "title": "Relação a introdução às funções",
-                        "text": "Relação a introdução às funções..."
+                        "text": "<p>Na Matemática, o conceito de função é inteiramente ligado às questões de dependência entre duas grandezas variáveis. Toda função possui uma lei de formação algébrica que relaciona dois ou mais conjuntos através de cálculos matemáticos. Dizemos que para toda função temos um conjunto denominado domínio e sua respectiva imagem. Por exemplo, podemos estabelecer uma relação de dependência entre o preço do litro do combustível e a quantidade de litros usados no abastecimento de um carro. Suponhamos que o preço do litro de gasolina seja R$ 2,50, dessa forma, podemos determinar a seguinte função y = 2,5 * x, que determina o preço a pagar y em decorrência da quantidade de litros abastecidos x.</p><p>Toda situação problema envolvendo relações entre grandezas, é determinada por uma lei de formação algébrica. Observe mais um problema relacionado a uma situação cotidiana.</p><p>Numa viagem, um automóvel mantém uma velocidade constante de 60 km/h. Com o passar do tempo, esse veículo irá percorrer uma determinada distância. De tal modo, podemos determinar a distância percorrida pelo veículo relacionando a velocidade média e o tempo do movimento utilizando a seguinte expressão matemática, D = V * t, onde D: distância, V: velocidade média e t: tempo</p>"
                     }
                 },
                 {
@@ -47,7 +47,7 @@
                     "view": true,
                     "content": {
                         "title": "Função constante e função afim",
-                        "text": "Função constante e função afim..."
+                        "text": "<p>A função constante diferencia-se das funções do 1° grau por não poder ser caracterizada como crescente ou decrescente, sendo, por isso, constante. Podemos afirmar que uma função constante é definida pela seguinte fórmula: f(x) = c, c</p><p>A representação da relação estabelecida por uma função constante por meio do diagrama de flechas assemelha-se com a representação da imagem a seguir, pois, independentemente dos valores pertences ao domínio, a imagem é sempre composta por um único elemento.</p><p>O gráfico da função constante também apresenta uma particularidade em relação às demais funções. Ele é sempre uma reta paralela ou coincidente ao eixo x. Vejamos alguns exemplos de funções constantes e seus respectivos gráficos</p>"
                     }
                 },
                 {
@@ -59,7 +59,7 @@
                     "view": true,
                     "content": {
                         "title": "Função quadrática ou função polinomial do 2º grau",
-                        "text": "Função quadrática ou função polinomial do 2º grau..."
+                        "text": "<p>A função de segundo grau, também chamada de função quadrática ou função polinomial do 2° grau, é escrita como: f(x) = ax² + bx + c. Sendo os coeficientes \"a, b e c\" números reais e\"a\" diferente de 0 (zero). </p><p>O grau da função é determinado de acordo com o maior expoente que a incógnita x assume. Ou seja, se em uma função a incógnita x não tiver nenhum expoente, ela é classificada como de primeiro grau, mas se ela tiver o número dois como maior expoente, ela é classificada como de segundo grau.</p><p>Confira abaixo alguns tipos de funções polinomiais: </p><p>Função de primeiro grau: f(x) = ax + b. Exemplo: f(x) = 2x + 1;</p><p>Função de segundo grau: f(x) = ax² + bx+ c. Exemplo: f(x)= 4x² – 2x;</p><p>Função de terceiro grau: f(x) = ax³ + bx² + cx + d. Exemplo: f(x) 2x³ + x² + 2x + 1; </p>"
                     }
                 },
                 {
@@ -71,7 +71,7 @@
                     "view": true,
                     "content": {
                         "title": "Complemento sobre a teoria das funções",
-                        "text": "Complemento sobre a teoria das funções..."
+                        "text": "<p>A cada instante (x), em minutos, corresponde a uma única distância (y), em metros. Dizemos então que a distância percorrida pelo atleta encontra-se em função do instante de tempo gasto em seu treinamento. Como a cada 10 minutos são percorridos 1500 metros; a cada minuto, 150 metros são percorridos, assim a fórmula que relaciona espaço e tempo pode ser descrita por y = 150x.</p><p>Dados dois conjuntos A e B não vazios, uma função f de A em B é uma relação que associa a cada elemento x∈A, um único elemento y∈B. Assim, uma função liga um elemento do domínio (conjunto A de valores de entrada) com um segundo conjunto, o contradomínio (conjunto B de valores de saída) de tal forma que a cada elemento do domínio está associado exatamente a um, e somente um, elemento do contradomínio. O conjunto dos elementos do contradomínio que são relacionados pela f a algum x do domínio é o conjunto imagem, denotado por Im(f).</p><p>Cada elemento do conjunto A (domínio da função) está relacionado a um, e somente um, elemento do conjunto B (contradomínio da função). Todos os elementos do conjunto B que receberam flechas de A são imagens dos elementos de A, ou seja, a imagem de -3 é 9, imagem de -2 é 4, imagem de -1 é 1 e imagem de 0 é 0. Podemos perceber, nesse caso, que a imagem de cada elemento do conjunto A equivale ao quadrado do seu valor. Logo, podemos concluir que a lei de formação dessa função pode ser definida por f(x) = x².</p>"
                     }
                 }
             ]
@@ -87,7 +87,7 @@
                     "view": true,
                     "content": {
                         "title": "Revisão: conjuntos",
-                        "text": "Revisão: conjuntos..."
+                        "text": "<p>Revisão: conjuntos...</p>"
                     }
                 },
                 {
@@ -99,7 +99,7 @@
                     "view": true,
                     "content": {
                         "title": "Princípios de análise combinatória",
-                        "text": "Princípios de análise combinatória..."
+                        "text": "<p>Princípios de análise combinatória...</p>"
                     }
                 },
                 {
@@ -111,7 +111,7 @@
                     "view": true,
                     "content": {
                         "title": "Formas de contagem",
-                        "text": "Formas de contagem..."
+                        "text": "<p>Formas de contagem...</p>"
                     }
                 },
                 {
@@ -123,7 +123,7 @@
                     "view": true,
                     "content": {
                         "title": "Binômio de Newton e triângulo de Pascal",
-                        "text": "Binômio de Newton e triângulo de Pascal..."
+                        "text": "<p>Binômio de Newton e triângulo de Pascal...</p>"
                     }
                 },
                 {
@@ -147,7 +147,7 @@
                     "view": true,
                     "content": {
                         "title": "Conceitos elementares de Geometria Analítica",
-                        "text": "Conceitos elementares de Geometria Analítica..."
+                        "text": "<p>Conceitos elementares de Geometria Analítica...</p>"
                     }
                 }
             ]

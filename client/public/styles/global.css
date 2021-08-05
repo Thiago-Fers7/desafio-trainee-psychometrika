@@ -18,7 +18,8 @@
     --gray-light: #f5f5f5;
     --gray-dark: #65676b;
     --gray-tranparent: #e6e6e7;
-    --gray-middle-dark: #8c939d; 
+    --gray-middle-dark: #8c939d;
+    --gray-75: #3f3f3f;
 }
 
 html {

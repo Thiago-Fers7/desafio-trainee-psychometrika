@@ -2,15 +2,18 @@
     "studentsData": [
         {
             "email": "thiago@email.com",
-            "password": "psychostudent"
+            "password": "psychostudent",
+            "team": 1
         },
         {
             "email": "luiz@email.com",
-            "password": "psychostudent"
+            "password": "psychostudent",
+            "team": 1
         },
         {
             "email": "santos@email.com",
-            "password": "psychostudent"
+            "password": "psychostudent",
+            "team": 2
         }
     ],
     "adminsData": [

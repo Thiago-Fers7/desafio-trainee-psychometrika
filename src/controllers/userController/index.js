@@ -17,7 +17,7 @@ const userController = {
                 const student = await students.findOne({ email })
 
                 if (student && bcrypt.compareSync(password, student.password))
-                    res.status(200).json({ authentication: "student", pass: true })
+                    res.status(200).json({ authentication: "student", pass: true, team: student.team })
                 else
                     throw "Email ou senha inválidos!"
             }

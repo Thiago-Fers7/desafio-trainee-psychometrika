@@ -175,10 +175,13 @@
                     }
 
                     .widget {
+                        width: 15rem;
+                        text-align: center;
+                        background: var(--gray-75);
                         position: absolute;
                         display: none;
                         bottom: -130%;
-                        left: -59%;
+                        left: 5.5rem;
                         z-index: 100;
                     }
 

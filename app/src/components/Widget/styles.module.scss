@@ -4,10 +4,11 @@
     padding: 0.7rem 1.2rem;
     border-radius: 0.8rem;
     background: var(--gray-75);
+    width: 15rem;
     left: -50%;
     bottom: -107%;
     transform: translateX(-27%);
-    
+
     &::before {
         content: "";
         width: 1.2rem;
@@ -19,7 +20,7 @@
         background: var(--gray-75);
         transform: rotate(45deg) translateX(-50%);
     }
-
+    
     p {
         color: #fff;
         font-weight: 400;

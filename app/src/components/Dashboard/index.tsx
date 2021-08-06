@@ -286,10 +286,13 @@ function Dashboard({ chapter, serieIndex }: ChildrenDataMod) {
                                                     <span {...provided.dragHandleProps}>
                                                         {!isAdminStudentVision && <img src="/images/move-icon.svg" alt="Mover" />}
                                                     </span>
+
                                                     <span className={styles.index}>
                                                         <span>{countIndexView[index]}</span>
                                                     </span>
+
                                                     <span className={styles.titleChapter} title={chapter.content.title}>{chapter.content.title}</span>
+                                                    
                                                     <div className={styles.icons}>
                                                         {!isAdminStudentVision && (
                                                             <div onClick={() => handleHide(index)}>

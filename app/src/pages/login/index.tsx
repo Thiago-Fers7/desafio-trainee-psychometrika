@@ -110,7 +110,7 @@ function Login() {
                         }
                     })
                     .catch(err => {
-                        handleWarning(true, err)
+                        handleWarning(true, String(err))
                     })
                     .finally(() => {
                         setIsLoading(false)

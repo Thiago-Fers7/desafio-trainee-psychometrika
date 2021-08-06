@@ -48,6 +48,12 @@ button, textarea, input, body {
     }
 }
 
+@media (max-width: 600px) {
+    body {
+        overflow-x: hidden;
+    }
+}
+
 button {
     cursor: pointer;
 }

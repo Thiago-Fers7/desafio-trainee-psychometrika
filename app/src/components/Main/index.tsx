@@ -64,13 +64,13 @@ function Main() {
                     <article className={styles.dashboardContainer}>
                         {allChapters.map((chapter: AllChapterData, index: number) => {
                             return (
-                                <>
+                                <div key={index}>
                                     {(currentTeam - 1) === index ? (
-                                        <Dashboard key={index} chapter={chapter} serieIndex={index} />
+                                        <Dashboard chapter={chapter} serieIndex={index} />
                                     ) : isAdmin && (
-                                        <Dashboard key={index} chapter={chapter} serieIndex={index} />
+                                        <Dashboard chapter={chapter} serieIndex={index} />
                                     )}
-                                </>
+                                </div>
                             )
                         })}
                     </article>

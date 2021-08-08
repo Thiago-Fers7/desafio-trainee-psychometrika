@@ -1,7 +1,7 @@
 # Desafio - Pscychometrika
 
 ## Descrição
-Esta aplicação funciona como um organizador de capítulos de livros. O administrador pode ver todos os livros de todas as séries. Já o aluno só tem acesso a sua rescpecita série. <br>
+Esta aplicação funciona como um organizador de capítulos de livros. O administrador pode ver todos os livros de todas as séries. Já o aluno só tem acesso a sua respectiva série. <br>
 O admistrador também pode mover os capítulos livremente, alterando sua ordem, assim como voltar a ordem original a qualquer momento, essas mudanças refletirão na visualização do aluno.
 
 ## Rodar projeto

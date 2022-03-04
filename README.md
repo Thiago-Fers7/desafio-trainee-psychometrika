@@ -31,7 +31,7 @@ O admistrador também pode mover os capítulos livremente, alterando sua ordem, 
     - Instale suas depedências com **npm i** ou **yarn**
     - Inicie o app com o comando: **npm run start** ou **yarn start**
 
-Pronto! Seus projeto está rodando em http://localhost:3000
+Pronto! O projeto está rodando em http://localhost:3000
 
 <hr>
 
